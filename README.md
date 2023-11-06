@@ -9,23 +9,23 @@
 ---
 **Kontrak Tahap 1 Tugas Akhir**
 
-| NPM         | Nama Lengkap          | Fitur yang akan diselesaikan |
-|-------------|-----------------------|------------------------------| 
-| 2106702200  | Trisno Bayu Pamungkas | User Service #1, #2, #5      |
-| 2006596951  | Gilang Arfadika Hanania | Order Service #1, #2, #4     |
-| 2106707712  | Joan Isva Shanti Andrea | Front End #1, #7, #10, #15   |
-| 2106752035  | Ratu Almas Naurah Anvilen | Catalog Service #1, #3, #4   |
-| 1806191521  | Safira Rizki Anartya | Front End #2, #11            |
+| NPM         | Nama Lengkap          | Fitur yang akan diselesaikan   |
+|-------------|-----------------------|--------------------------------| 
+| 2106702200  | Trisno Bayu Pamungkas | User Service #1, #2, #5        |
+| 2006596951  | Gilang Arfadika Hanania | Order Service #1, #2, #4       |
+| 2106707712  | Joan Isva Shanti Andrea | Front End #1, #7, #10          |
+| 2106752035  | Ratu Almas Naurah Anvilen | Catalog Service #1, #3, #4, #6 |
+| 1806191521  | Safira Rizki Anartya | Front End #2, #11              |
 ---
 **Kontrak Tahap 2 Tugas Akhir**
 
-| NPM         | Nama Lengkap          | Fitur yang akan diselesaikan |
-|-------------|-----------------------|------------------------------| 
-| 2106702200  | Trisno Bayu Pamungkas | User Service #3, #4, #6     |
-| 2006596951  | Gilang Arfadika Hanania | Order Service #6, #7     |
-| 2106707712  | Joan Isva Shanti Andrea | Front End #6, #9, #14, #17   |
-| 2106752035  | Ratu Almas Naurah Anvilen | Catalog Service #2, #6,  #7, #10   |
-| 1806191521  | Safira Rizki Anartya | Front End #4, #5, #12, #13            |
+| NPM         | Nama Lengkap          | Fitur yang akan diselesaikan                                          |
+|-------------|-----------------------|-----------------------------------------------------------------------| 
+| 2106702200  | Trisno Bayu Pamungkas | User Service #3, User Service #4, User Service #6, Front End #14      |
+| 2006596951  | Gilang Arfadika Hanania | Order Service #6, Order Service #7, Front End #12                     |
+| 2106707712  | Joan Isva Shanti Andrea | Front End #6, #9, #17                                                 |
+| 2106752035  | Ratu Almas Naurah Anvilen | Catalog Service #2, Catalog Service #7, Catalog Service #10, Front End #15 |
+| 1806191521  | Safira Rizki Anartya | Front End #4, #5, #13                                                 |
 ---
 **Kontrak Tahap 3 Tugas Akhir**
 
