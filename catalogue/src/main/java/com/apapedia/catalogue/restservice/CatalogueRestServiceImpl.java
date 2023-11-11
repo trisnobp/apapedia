@@ -1,5 +1,8 @@
 package com.apapedia.catalogue.restservice;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,4 +19,10 @@ public class CatalogueRestServiceImpl implements CatalogueRestService{
     public List<Catalogue> retrieveRestAllCatalogue() {
         return catalogueDb.findAllByOrderByJudulAsc();
     }
+
+    @Override
+    public Optional<Catalogue> getRestCatalogueById(UUID id) {
+        return catalogueDb.findById(id);
+    }
+    
 }
