@@ -1,11 +1,14 @@
 package com.apapedia.catalogue.controller;
 
+import java.util.UUID;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.apapedia.catalogue.DTO.CatalogueMapper;
@@ -66,6 +69,15 @@ public class CatalogueController {
 
         return "catalogue";
     }
+
+    @GetMapping("/catalogue/{id}/delete")
+    public String deleteCatalogue(@PathVariable("id") UUID id, Model model) {
+        var catalogue = catalogueService.getCatalogueById(id);
+        catalogueService.deleteCatalogue(catalogue);
+        model.addAttribute("id", id);
+        return "catalogue";
+    }
+    
 
     
     
