@@ -45,4 +45,9 @@ public class UserServiceImpl implements UserService {
     public UUID getCustomerCartId(UUID id) {
         return customerDb.findById(id).get().getCartId();
     }
+
+    @Override
+    public void deleteUser(UUID id) {
+        userDb.deleteById(id);
+    }
 }
