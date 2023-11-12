@@ -1,6 +1,8 @@
 package com.apapedia.catalogue.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,10 +19,13 @@ public class CatalogueServiceImpl implements CatalogueService{
     public void createCatalogue(Catalogue catalogue) {
         catalogueDb.save(catalogue);
     }
-
     @Override
     public List<Catalogue> retrieveAllCatalogue() {
         return catalogueDb.findAllByOrderByJudulAsc();
     }
 
+    @Override
+    public Optional<Catalogue> getCatalogueById(UUID id) {
+        return catalogueDb.findById(id);
+    }
 }
