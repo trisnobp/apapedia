@@ -1,4 +1,4 @@
-package com.apapedia.catalogue.restservice;
+package com.apapedia.catalogue.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,23 +10,23 @@ import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.repository.CatalogueDb;
 
 @Service
-public class CatalogueRestServiceImpl implements CatalogueRestService{
+public class CatalogueServiceImpl implements CatalogueService{
 
     @Autowired
     CatalogueDb catalogueDb;
 
     @Override
-    public void createRestCatalogue(Catalogue catalogue) {
+    public void createCatalogue(Catalogue catalogue) {
         catalogueDb.save(catalogue);
     }
     
     @Override
-    public List<Catalogue> retrieveRestAllCatalogue() {
+    public List<Catalogue> retrieveAllCatalogue() {
         return catalogueDb.findAllByOrderByJudulAsc();
     }
 
     @Override
-    public Optional<Catalogue> getRestCatalogueById(UUID id) {
+    public Optional<Catalogue> getCatalogueById(UUID id) {
         return catalogueDb.findById(id);
     }
     

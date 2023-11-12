@@ -1,9 +1,8 @@
-package com.apapedia.catalogue.restcontroller;
+package com.apapedia.catalogue.controller;
 
 import java.util.List;
 
 import java.util.UUID;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +18,16 @@ import org.springframework.web.server.ResponseStatusException;
 import com.apapedia.catalogue.DTO.CatalogueMapper;
 import com.apapedia.catalogue.DTO.request.CreateCatalogueRequestDTO;
 import com.apapedia.catalogue.model.Catalogue;
-import com.apapedia.catalogue.restservice.CatalogueRestService;
+import com.apapedia.catalogue.service.CatalogueService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/catalogue")
-public class CatalogueRestController {
+public class CatalogueController {
 
     @Autowired
-    private CatalogueRestService catalogueRestService;
+    private CatalogueService catalogueService;
 
     @Autowired
     private CatalogueMapper catalogueMapper;
@@ -41,19 +40,19 @@ public class CatalogueRestController {
                 );
         } else{
             var catalogue = catalogueMapper.createCatalogueRequestDTOToCatalogue(catalogueDTO);
-            catalogueRestService.createRestCatalogue(catalogue);
+            catalogueService.createCatalogue(catalogue);
             return catalogue;
         }
     }
 
     @GetMapping(value = "/view-all")
     private List<Catalogue> retrieveAllCatalogue() {
-        return catalogueRestService.retrieveRestAllCatalogue();
+        return catalogueService.retrieveAllCatalogue();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Catalogue> retrieveCatalogue(@PathVariable UUID id) {
-        return catalogueRestService.getRestCatalogueById(id)
+        return catalogueService.getCatalogueById(id)
             .map(ResponseEntity::ok)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Catalogue with ID " + id + " not found"
