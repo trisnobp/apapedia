@@ -1,2 +1,4 @@
-package com.apapedia.order.controller;public class OrderController {
+package com.apapedia.order.controller;
+
+public class OrderController {
 }

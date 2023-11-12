@@ -1,2 +1,4 @@
-package com.apapedia.order.repository;public interface OrderDb {
+package com.apapedia.order.repository;
+
+public interface OrderDb {
 }

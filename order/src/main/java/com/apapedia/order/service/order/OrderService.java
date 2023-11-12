@@ -1,2 +1,4 @@
-package com.apapedia.order.service.order;public interface OrderService {
+package com.apapedia.order.service.order;
+
+public interface OrderService {
 }

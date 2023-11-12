@@ -1,2 +1,4 @@
-package com.apapedia.order.model;public class OrderItem {
+package com.apapedia.order.model;
+
+public class OrderItem {
 }
