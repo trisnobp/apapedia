@@ -28,4 +28,9 @@ public class CatalogueServiceImpl implements CatalogueService{
     public Optional<Catalogue> getCatalogueById(UUID id) {
         return catalogueDb.findById(id);
     }
+
+    @Override
+    public void deleteCatalogue(Catalogue catalogue) {
+        catalogueDb.delete(catalogue);
+    }
 }

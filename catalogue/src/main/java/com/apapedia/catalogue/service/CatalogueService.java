@@ -11,4 +11,6 @@ public interface CatalogueService {
     public List<Catalogue> retrieveAllCatalogue();
 
     public Optional<Catalogue> getCatalogueById(UUID id);
+
+    public void deleteCatalogue(Catalogue catalogue);
 }
