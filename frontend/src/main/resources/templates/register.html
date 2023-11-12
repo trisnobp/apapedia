@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <style>
+        body {
+          font-family: 'DM Mono', monospace;
+          font-family: 'Poppins', sans-serif;
+        }
+
+        .form-control {
+          border: none;
+          border-bottom: 1px solid #adb5bd;
+          padding: 5px 10px;
+          outline: none;
+          border-radius: 0;
+        }
+
+        [placeholder]:focus::-webkit-input-placeholder {
+          border: none;
+          border-bottom: 1px solid ##1890ff;
+          outline: none;
+          transition: text-indent 0.4s 0.4s ease;
+          text-indent: -100%;
+          opacity: 1;
+          border-radius: 0;
+        }
+
+        .center-button {
+          display: flex;
+          justify-content: center;
+        }
+
+        .primary-button {
+          background-color: #FAD000;
+          border: none;
+          border-radius: 30px;
+          width: 100%;
+          height: 48px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="container-fluid d-flex align-items-center" style="height: 100vh;">
+    <div class="container">
+        <div class="row">
+
+            <!-- Left Column -->
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <p class="text-center mb-0">Welcome to</p>
+                <h2 class="text-center">APAPEDIA</h2>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="align-items-start">
+                    <h1 class="text-start">Register</h1>
+                    <form th:action="@{/login}" method="post">
+
+                        <div class="mb-4 pt-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="username">
+                        </div>
+                        <div class="mb-4 pt-3">
+                            <label for="username" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password">
+                        </div>
+
+                        <br/>
+
+                        <div class="center-button">
+                            <button type="submit" class="primary-button">Register</button>
+                        </div>
+
+                        <p class="text-secondary mt-3">Already registered?<a th:href="@{/login}" class="btn btn-link">Log In</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
