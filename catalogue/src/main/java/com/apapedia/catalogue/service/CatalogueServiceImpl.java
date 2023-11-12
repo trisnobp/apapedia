@@ -19,7 +19,6 @@ public class CatalogueServiceImpl implements CatalogueService{
     public void createCatalogue(Catalogue catalogue) {
         catalogueDb.save(catalogue);
     }
-    
     @Override
     public List<Catalogue> retrieveAllCatalogue() {
         return catalogueDb.findAllByOrderByJudulAsc();
@@ -29,5 +28,4 @@ public class CatalogueServiceImpl implements CatalogueService{
     public Optional<Catalogue> getCatalogueById(UUID id) {
         return catalogueDb.findById(id);
     }
-    
 }

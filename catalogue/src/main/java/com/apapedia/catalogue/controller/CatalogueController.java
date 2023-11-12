@@ -49,7 +49,6 @@ public class CatalogueController {
     private List<Catalogue> retrieveAllCatalogue() {
         return catalogueService.retrieveAllCatalogue();
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<Catalogue> retrieveCatalogue(@PathVariable UUID id) {
         return catalogueService.getCatalogueById(id)
@@ -58,5 +57,4 @@ public class CatalogueController {
                 HttpStatus.NOT_FOUND, "Catalogue with ID " + id + " not found"
             ));
     }
-    
 }
