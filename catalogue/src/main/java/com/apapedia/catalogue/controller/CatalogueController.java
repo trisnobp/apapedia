@@ -2,7 +2,6 @@ package com.apapedia.catalogue.controller;
 
 import java.util.List;
 
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +44,9 @@ public class CatalogueController {
         }
     }
 
-    
+    @GetMapping(value = "/view-all")
+    private List<Catalogue> retrieveAllCatalogue() {
+        return catalogueService.retrieveAllCatalogue();
+    }
+
 }
