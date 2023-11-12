@@ -49,6 +49,7 @@ public class CatalogueController {
     private List<Catalogue> retrieveAllCatalogue() {
         return catalogueService.retrieveAllCatalogue();
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Catalogue> retrieveCatalogue(@PathVariable UUID id) {
         return catalogueService.getCatalogueById(id)
@@ -57,4 +58,11 @@ public class CatalogueController {
                 HttpStatus.NOT_FOUND, "Catalogue with ID " + id + " not found"
             ));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
+        catalogueService.deleteCatalogue(catalogueService.getCatalogueById(id).get());
+        return ResponseEntity.ok().build(); // Return a 200 OK to indicate successful soft delete
+    }
+    
 }
