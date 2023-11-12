@@ -61,7 +61,7 @@ public class CatalogueController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
-        catalogueService.deleteCatalogue(id);
+        catalogueService.deleteCatalogue(catalogueService.getCatalogueById(id).get());
         return ResponseEntity.ok().build(); // Return a 200 OK to indicate successful soft delete
     }
     
