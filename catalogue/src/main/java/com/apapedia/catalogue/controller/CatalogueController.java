@@ -2,6 +2,7 @@ package com.apapedia.catalogue.controller;
 
 import java.util.List;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +49,12 @@ public class CatalogueController {
     private List<Catalogue> retrieveAllCatalogue() {
         return catalogueService.retrieveAllCatalogue();
     }
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Catalogue> retrieveCatalogue(@PathVariable UUID id) {
+        return catalogueService.getCatalogueById(id)
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Catalogue with ID " + id + " not found"
+            ));
+    }
 }
