@@ -3,6 +3,8 @@ package com.apapedia.user.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,6 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+@SQLDelete(sql = "UPDATE _user SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 public class User {
 
     @Id
