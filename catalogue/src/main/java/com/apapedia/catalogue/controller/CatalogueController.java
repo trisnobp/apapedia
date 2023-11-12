@@ -49,5 +49,4 @@ public class CatalogueController {
         return catalogueService.retrieveAllCatalogue();
     }
 
-    
 }

@@ -5,6 +5,5 @@ import java.util.List;
 
 public interface CatalogueService {
     public void createCatalogue(Catalogue catalogue);
-
     public List<Catalogue> retrieveAllCatalogue();
 }
