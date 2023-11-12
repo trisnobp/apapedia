@@ -1,84 +1,67 @@
 package com.apapedia.catalogue.controller;
 
+
+import java.util.List;
+
 import java.util.UUID;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.catalogue.DTO.CatalogueMapper;
 import com.apapedia.catalogue.DTO.request.CreateCatalogueRequestDTO;
+import com.apapedia.catalogue.model.Catalogue;
 import com.apapedia.catalogue.service.CatalogueService;
-import com.apapedia.catalogue.service.CategoryService;
 
 import jakarta.validation.Valid;
 
-@Controller
+@RestController
+@RequestMapping("/api/catalogue")
 public class CatalogueController {
 
     @Autowired
-    CatalogueService catalogueService;
+    private CatalogueService catalogueService;
 
     @Autowired
-    CategoryService categoryService;
+    private CatalogueMapper catalogueMapper;
 
-    @Autowired
-    CatalogueMapper catalogueMapper;
-
-    @GetMapping("/catalogue/create")
-    public String formCreateCatalogue(Model model){
-        var catalogueDTO = new CreateCatalogueRequestDTO();
-
-        model.addAttribute("catalogueDTO", catalogueDTO);
-
-        var listCategory = categoryService.getAllCategory();
-        model.addAttribute("listCategory", listCategory);
-
-        return "form-create-catalogue";
-    }
-
-    @PostMapping("/catalogue/create")
-    public String addCatalogue(@Valid @ModelAttribute CreateCatalogueRequestDTO catalogueDTO, BindingResult bindingResult, Model model){
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
-            return "error-view";
+    @PostMapping(value = "/create")
+    public Catalogue addCatalogue(@Valid @RequestBody CreateCatalogueRequestDTO catalogueDTO, BindingResult bindingResult){
+        if(bindingResult.hasFieldErrors()){
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
+                );
+        } else{
+            var catalogue = catalogueMapper.createCatalogueRequestDTOToCatalogue(catalogueDTO);
+            catalogueService.createCatalogue(catalogue);
+            return catalogue;
         }
-
-        var catalogue = catalogueMapper.createCatalogueRequestDTOToCatalogue(catalogueDTO);
-
-        catalogueService.createCatalogue(catalogue);
-
-        model.addAttribute("id", catalogue.getId());
-
-        model.addAttribute("nama", catalogue.getName());
-
-        model.addAttribute("image", catalogue.getImage());
-
-        model.addAttribute("price", catalogue.getPrice());
-
-        model.addAttribute("nama_produk", catalogue.getProductName());
-
-        model.addAttribute("desc_produk", catalogue.getProductDesc());
-
-        model.addAttribute("stok", catalogue.getStock());
-
-        return "catalogue";
+    }
+    @GetMapping(value = "/view-all")
+    private List<Catalogue> retrieveAllCatalogue() {
+        return catalogueService.retrieveAllCatalogue();
     }
 
-    @GetMapping("/catalogue/{id}/delete")
-    public String deleteCatalogue(@PathVariable("id") UUID id, Model model) {
-        var catalogue = catalogueService.getCatalogueById(id);
-        catalogueService.deleteCatalogue(catalogue);
-        model.addAttribute("id", id);
-        return "catalogue";
+    @GetMapping("/{id}")
+    public ResponseEntity<Catalogue> retrieveCatalogue(@PathVariable UUID id) {
+        return catalogueService.getCatalogueById(id)
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Catalogue with ID " + id + " not found"
+            ));
     }
-    
-
-    
+    @GetMapping("/{id}")
+    public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
+        catalogueService.deleteCatalogue(catalogueService.getCatalogueById(id).get());
+        return ResponseEntity.ok().build(); // Return a 200 OK to indicate successful soft delete
+    }
     
 }

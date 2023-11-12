@@ -9,11 +9,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.UUID;
 
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE catalogue SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 @Table(name = "catalog") 
 public class Catalogue {
 
@@ -41,5 +47,8 @@ public class Catalogue {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = Boolean.FALSE;
 
 }
