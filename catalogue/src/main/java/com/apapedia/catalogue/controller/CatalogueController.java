@@ -1,5 +1,6 @@
 package com.apapedia.catalogue.controller;
 
+
 import java.util.List;
 
 import java.util.UUID;
@@ -44,7 +45,6 @@ public class CatalogueController {
             return catalogue;
         }
     }
-
     @GetMapping(value = "/view-all")
     private List<Catalogue> retrieveAllCatalogue() {
         return catalogueService.retrieveAllCatalogue();
@@ -58,7 +58,6 @@ public class CatalogueController {
                 HttpStatus.NOT_FOUND, "Catalogue with ID " + id + " not found"
             ));
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
         catalogueService.deleteCatalogue(catalogueService.getCatalogueById(id).get());
