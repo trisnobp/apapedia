@@ -1,9 +1,11 @@
 package com.apapedia.user.service.auth;
 
 import com.apapedia.user.dto.request.LoginRequest;
+import com.apapedia.user.dto.response.CreateUserCartResponse;
 import com.apapedia.user.dto.response.LoginResponse;
 import com.apapedia.user.dto.request.RegisterRequest;
 import com.apapedia.user.dto.response.RegisterResponse;
+import com.apapedia.user.model.Customer;
 import com.apapedia.user.model.Role;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.model.User;
@@ -11,8 +13,10 @@ import com.apapedia.user.repository.CustomerDb;
 import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +31,13 @@ public class AuthServiceImpl implements AuthService {
     SellerDb sellerDb;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    private final WebClient webClient;
+
+    public AuthServiceImpl(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl("http://localhost:8082/api").build(); // Server Order
+    }
+
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
@@ -60,7 +71,15 @@ public class AuthServiceImpl implements AuthService {
             // Input data ke table customer/seller
             if (role == Role.CUSTOMER) {
                 // Consume API untuk buat cart di Order Service, terus pass UUID cart ke sini
-                // var user = Customer.builder().userId(saveUser.getId()).cartId());
+                var cartDataResponse = this.webClient
+                        .post()
+                        .uri("/cart/create/" + savedUser.getId())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .retrieve()
+                        .bodyToMono(CreateUserCartResponse.class).block();
+
+                var customer = Customer.builder().userId(savedUser.getId()).cartId(cartDataResponse.getCartId()).build();
+                customerDb.save(customer);
             } else {
                 var seller = Seller.builder().userId(savedUser.getId()).category(request.getCategory()).build();
                 sellerDb.save(seller);

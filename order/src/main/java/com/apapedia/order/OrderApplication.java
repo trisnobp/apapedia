@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.apapedia.order.DTO.CartMapper;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.service.CartService;
@@ -56,7 +55,6 @@ public class OrderApplication {
 
 			cartService.createCartItemBaru(cartItem);
 
-		
 	};
 }
 
