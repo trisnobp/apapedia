@@ -33,16 +33,15 @@ public class CatalogueController {
     private CatalogueMapper catalogueMapper;
 
     @PostMapping(value = "/create")
-    public Catalogue addCatalogue(@Valid @RequestBody CreateCatalogueRequestDTO catalogueDTO, BindingResult bindingResult){
+    public ResponseEntity<Catalogue> addCatalogue(@Valid @RequestBody CreateCatalogueRequestDTO catalogueDTO, BindingResult bindingResult){
         if(bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
-                );
-        } else{
-            var catalogue = catalogueMapper.createCatalogueRequestDTOToCatalogue(catalogueDTO);
-            catalogueService.createCatalogue(catalogue);
-            return catalogue;
+            );
         }
+
+        Catalogue createdCatalogue = catalogueService.createCatalogue(catalogueDTO);
+        return new ResponseEntity<>(createdCatalogue, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/view-all")
@@ -59,7 +58,7 @@ public class CatalogueController {
             ));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/delete")
     public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
         catalogueService.deleteCatalogue(id);
         return ResponseEntity.ok().build(); // Return a 200 OK to indicate successful soft delete

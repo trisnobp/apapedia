@@ -25,5 +25,5 @@ public class CreateCatalogueRequestDTO {
 
     private int stock;
 
-    private Category category;
+    private Category namaCategory;
 }
