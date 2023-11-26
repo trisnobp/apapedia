@@ -3,6 +3,7 @@ package com.apapedia.order.model;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -33,20 +34,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cart {
-    
 
     @Id
     @GeneratedValue( generator = "cart_sequence")
     @GenericGenerator(name = "cart_sequence", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id_cart", nullable = false)
 
-    private UUID idCart ;
+    private UUID idCart;
 
     @Column(name = "id_user", nullable = false)
     private UUID userId;
 
     @Column(name = "total_price", nullable = false)
-    private Integer totalPrice ; 
+    private long totalPrice;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonManagedReference

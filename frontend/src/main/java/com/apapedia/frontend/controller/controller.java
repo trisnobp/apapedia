@@ -26,8 +26,9 @@ public class controller {
     @Autowired
     CatalogueServiceClient catalogueServiceClient;
     @GetMapping("/")
-    public String home() {
-        return "login";
+    public String homePage() {
+
+        return "home";
     }
 
     @GetMapping("/login")

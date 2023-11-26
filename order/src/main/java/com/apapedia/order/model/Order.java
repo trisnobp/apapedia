@@ -28,14 +28,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Table(name="orders")
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name="_order")
 public class Order {
-
-    
     @Id
     @GeneratedValue(generator = "order_sequence")
     @GenericGenerator(name = "order_sequence", strategy = "org.hibernate.id.UUIDGenerator")

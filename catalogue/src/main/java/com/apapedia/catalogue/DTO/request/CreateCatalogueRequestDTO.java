@@ -18,6 +18,8 @@ public class CreateCatalogueRequestDTO {
 
     private String image;
 
+    private UUID sellerId;
+
     private BigDecimal price;
 
     private String productName;

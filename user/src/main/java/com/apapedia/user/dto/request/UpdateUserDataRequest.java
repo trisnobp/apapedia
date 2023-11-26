@@ -5,11 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-    private String usernameOrEmail;
+public class UpdateUserDataRequest {
+    private UUID id;
+    private String name;
+    private String username;
+    private String email;
     private String password;
+    private String address;
 }

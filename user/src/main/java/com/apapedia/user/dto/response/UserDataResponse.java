@@ -22,7 +22,8 @@ public class UserDataResponse {
     private long balance;
     private String address;
     private LocalDateTime createdAt;
-    @JsonInclude
     private LocalDateTime updatedAt;
+    // Can be null
     private String category;
+    private UUID cartId;
 }
