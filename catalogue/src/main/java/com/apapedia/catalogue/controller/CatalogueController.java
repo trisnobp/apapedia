@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.catalogue.DTO.CatalogueMapper;
 import com.apapedia.catalogue.DTO.request.CreateCatalogueRequestDTO;
 import com.apapedia.catalogue.model.Catalogue;
+import com.apapedia.catalogue.model.Category;
 import com.apapedia.catalogue.service.CatalogueService;
+import com.apapedia.catalogue.service.CategoryService;
 
 import jakarta.validation.Valid;
 
@@ -28,6 +31,9 @@ public class CatalogueController {
 
     @Autowired
     private CatalogueService catalogueService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private CatalogueMapper catalogueMapper;
@@ -45,8 +51,8 @@ public class CatalogueController {
     }
 
     @GetMapping(value = "/view-all")
-    private List<Catalogue> retrieveAllCatalogue() {
-        return catalogueService.retrieveAllCatalogue();
+    private List<Catalogue> allCatalogue() {
+        return catalogueService.retrieveAllCatalogue(); 
     }
 
     @GetMapping("/{id}")
@@ -63,5 +69,23 @@ public class CatalogueController {
         catalogueService.deleteCatalogue(id);
         return ResponseEntity.ok().build(); // Return a 200 OK to indicate successful soft delete
     }
-    
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Catalogue>> getCatalogsByName(@RequestParam String productName) {
+        List<Catalogue> catalogs = catalogueService.findByProductName(productName);
+        return ResponseEntity.ok(catalogs);
+    }
+
+    @GetMapping("/category/viewall")
+    public ResponseEntity<List<Category>> AllCategories() {
+        List<Category> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<List<Catalogue>> getCataloguesBySellerId(@PathVariable UUID sellerId) {
+        List<Catalogue> catalogues = catalogueService.getCataloguesBySellerId(sellerId);
+        return ResponseEntity.ok(catalogues);
+    }
+   
 }

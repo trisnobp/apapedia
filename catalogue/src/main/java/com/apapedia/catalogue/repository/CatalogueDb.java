@@ -11,6 +11,10 @@ import com.apapedia.catalogue.model.Catalogue;
 
 @Repository
 public interface CatalogueDb extends JpaRepository<Catalogue, UUID> , JpaSpecificationExecutor<Catalogue> {
-    List<Catalogue> findAllByOrderByNameAsc();
+    List<Catalogue> findAllByOrderByProductNameAsc();
+
+    List<Catalogue> findByProductNameContaining(String productName);
+
+    List<Catalogue> findBySellerId(UUID sellerId);
     
 }

@@ -53,5 +53,10 @@ public class CategoryServiceImpl implements CategoryService {
         newCategory.setNamaCategory(categoryName); 
         return categoryDb.save(newCategory);
     }
+
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryDb.findAll();
+    }
     
 }

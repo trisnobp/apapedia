@@ -29,7 +29,7 @@ public class Category {
     @JsonManagedReference
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Catalogue> catalogs;
-
+ 
     public enum CategoryName {
         AKSESORIS_FASHION("Aksesoris Fashion"),
         BUKU_ALAT_TULIS("Buku & Alat Tulis"),

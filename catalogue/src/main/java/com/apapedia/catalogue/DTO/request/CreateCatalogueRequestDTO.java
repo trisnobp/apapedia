@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import com.apapedia.catalogue.model.Category;
 
@@ -17,6 +18,8 @@ public class CreateCatalogueRequestDTO {
 
     private String image;
 
+    private UUID sellerId;
+
     private BigDecimal price;
 
     private String productName;
@@ -25,5 +28,5 @@ public class CreateCatalogueRequestDTO {
 
     private int stock;
 
-    private Category namaCategory;
+    private Category category;
 }

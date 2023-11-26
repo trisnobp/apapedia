@@ -26,14 +26,14 @@ public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "nama", nullable = false)
-    private String name;
-
     @Column(name = "image", nullable = false)
     private String image;
 
     @Column(name = "harga", nullable = false)
     private BigDecimal price;
+
+    @Column(name = "id_seller", nullable = false)
+    private UUID sellerId;
 
     @Column(name = "nama_produk", nullable = false)
     private String productName;

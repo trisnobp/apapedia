@@ -14,4 +14,8 @@ public interface CatalogueService {
     public Optional<Catalogue> getCatalogueById(UUID id);
 
     public void deleteCatalogue(UUID id);
+
+    public List<Catalogue> findByProductName(String productName);
+
+    public List<Catalogue> getCataloguesBySellerId(UUID sellerId);
 }
