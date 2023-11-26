@@ -10,6 +10,7 @@ java {
 	sourceCompatibility = '17'
 }
 
+
 repositories {
 	mavenCentral()
 }
@@ -29,7 +30,13 @@ dependencies {
 	implementation 'com.github.javafaker:javafaker:1.0.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	
 }
+
+
+
+
+
 
 tasks.named('test') {
 	useJUnitPlatform()

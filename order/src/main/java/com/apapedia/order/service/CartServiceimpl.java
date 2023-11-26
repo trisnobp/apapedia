@@ -30,9 +30,9 @@ public class CartServiceimpl implements CartService{
     public Cart createCart(Cart cart) {
 
 
-        cartDb.save(cart);
+        var cartTersimpan = cartDb.save(cart);
 
-        return cart;
+        return cartTersimpan;
 
     }
 
@@ -47,7 +47,13 @@ public class CartServiceimpl implements CartService{
     @Override
     public Cart getCartByUserId(UUID userId) {
 
-        return cartDb.getCartByUserId(userId);
+        return cartDb.findByUserId(userId);
+    }
+
+    @Override
+    public Cart findByIdCart(UUID idCart) {
+        
+        return cartDb.findByIdCart(idCart);
     }
     
 }

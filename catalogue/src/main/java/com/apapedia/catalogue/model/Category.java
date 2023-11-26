@@ -3,6 +3,7 @@ package com.apapedia.catalogue.model;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,9 +26,11 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private CategoryName namaCategory;
 
+    // gilang : mencegah error ketika berkomunikasi dengan microservice lain menggunakan Restful API
+    @JsonManagedReference
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Catalogue> catalogs;
-
+    
     public enum CategoryName {
         AKSESORIS_FASHION("Aksesoris Fashion"),
         BUKU_ALAT_TULIS("Buku & Alat Tulis"),
@@ -53,5 +56,7 @@ public class Category {
         public String toString() {
             return displayName;
         }
+
+        
     }
 }
