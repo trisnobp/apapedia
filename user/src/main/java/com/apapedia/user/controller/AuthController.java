@@ -30,13 +30,13 @@ public class AuthController {
     public ResponseEntity<LoginResponse> loginForCustomer(
             @RequestBody LoginRequest request
     ) {
-        return ResponseEntity.ok(authService.login(request));
+        return ResponseEntity.ok(authService.loginForCustomer(request));
     }
 
     @PostMapping("/sellerLogin")
     public ResponseEntity<LoginResponse> loginForSeller(
             @RequestBody LoginRequest request
     ) {
-        return ResponseEntity.ok(authService.login(request));
+        return ResponseEntity.ok(authService.loginForSeller(request));
     }
 }
