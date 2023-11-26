@@ -7,5 +7,7 @@ import com.apapedia.user.dto.response.RegisterResponse;
 
 public interface AuthService {
     RegisterResponse register(RegisterRequest request);
-    LoginResponse login(LoginRequest request);
+    LoginResponse loginForSeller(LoginRequest request);
+    LoginResponse loginForCustomer(LoginRequest request);
+    LoginResponse loginWithSSO(LoginRequest request);
 }

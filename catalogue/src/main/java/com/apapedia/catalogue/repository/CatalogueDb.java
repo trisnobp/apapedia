@@ -9,8 +9,19 @@ import org.springframework.stereotype.Repository;
 
 import com.apapedia.catalogue.model.Catalogue;
 
+// @Repository
+// public interface CatalogueDb extends JpaRepository<Catalogue, UUID> , JpaSpecificationExecutor<Catalogue> {
+//     List<Catalogue> findAllByOrderByJudulAsc();
+    
+// }
+
 @Repository
 public interface CatalogueDb extends JpaRepository<Catalogue, UUID> , JpaSpecificationExecutor<Catalogue> {
-    List<Catalogue> findAllByOrderByJudulAsc();
+    List<Catalogue> findAllByOrderByProductNameAsc();
+
+    List<Catalogue> findByProductNameContaining(String productName);
+
+    List<Catalogue> findBySellerId(UUID sellerId);
+
     
 }

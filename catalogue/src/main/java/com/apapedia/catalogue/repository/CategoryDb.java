@@ -8,10 +8,12 @@ import com.apapedia.catalogue.model.Category;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface CategoryDb extends JpaRepository<Category, UUID> , JpaSpecificationExecutor<Category> {
     List<Category> findAll();
     
+    Optional<Category> findByNamaCategory(Category.CategoryName categoryName);
 }
