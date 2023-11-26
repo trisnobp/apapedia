@@ -1,19 +1,19 @@
-package com.apapedia.catalogue.DTO.request;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.apapedia.catalogue.DTO.response;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.apapedia.catalogue.model.Category;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data 
-public class CreateCatalogueRequestDTO {
-
+// Gilang : DTO Catalogue untuk response dari request microservice lain
+public class ResponseCatalogueDTO {
     private String name;
 
     private String image;
@@ -28,5 +28,5 @@ public class CreateCatalogueRequestDTO {
 
     private int stock;
 
-    private Category category;
+    private String displayCategory;
 }

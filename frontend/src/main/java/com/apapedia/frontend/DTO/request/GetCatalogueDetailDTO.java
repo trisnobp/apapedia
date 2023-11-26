@@ -1,18 +1,25 @@
-package com.apapedia.catalogue.DTO.request;
+package com.apapedia.frontend.DTO.request;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.apapedia.catalogue.model.Category;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data 
-public class CreateCatalogueRequestDTO {
+@Getter
+@Setter
+public class GetCatalogueDetailDTO {
+
+    private UUID id;
 
     private String name;
 
@@ -24,9 +31,7 @@ public class CreateCatalogueRequestDTO {
 
     private String productDesc;
 
-    private UUID sellerId;
-
     private int stock;
 
-    private Category category;
+    private String displayCategory;
 }

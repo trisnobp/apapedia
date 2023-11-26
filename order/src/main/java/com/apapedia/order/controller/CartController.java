@@ -1,5 +1,6 @@
 package com.apapedia.order.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apapedia.order.DTO.CartItemDTO;
 import com.apapedia.order.DTO.CartMapper;
+import com.apapedia.order.DTO.request.CartItemDTO;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.service.CartServiceimpl;
@@ -21,7 +22,7 @@ import com.apapedia.order.service.OrderServiceimpl;
 
 @Controller
 @RestController
-@RequestMapping("/Order")
+@RequestMapping("/orderservice")
 public class CartController {
     
 
@@ -34,34 +35,45 @@ public class CartController {
     @Autowired
     CartMapper cartMapper;
 
-
-
-    @PostMapping("/cart/create/{userId}")
-    public void createCart(@PathVariable("userId") UUID userId){
+    // membuat Cart ketika User dibuat
+    @PostMapping("cart/create/{userId}")
+    public Cart createCart(@PathVariable("userId") UUID userId){
         
         Cart cartBaru = new Cart();
 
         cartBaru.setUserId(userId);
         cartBaru.setTotalPrice(0);
 
-        cartServiceimpl.createCart(cartBaru);
+        cartBaru.setListCartItem(new ArrayList<>());
+
+        return cartServiceimpl.createCart(cartBaru);
     }
 
-    @GetMapping("cartitem/{userId}")
+    // Mendapatkan CartItem berdasarkan  User Id
+    @GetMapping("cart/cartitem/{userId}")
     public List<CartItem> getCartItem(@PathVariable("userId") UUID userId){
 
-        Cart cart = cartServiceimpl.getCartByUserId(userId);
+        var listCart = cartServiceimpl.getCartByUserId(userId);
 
-        return cart.getListCartItem();
+        return listCart.getListCartItem();
 
 
 
     }
 
-    @PostMapping("cartItem/create")
+    // Menambahkan CartItem baru pada Cart tertentu
+    @PostMapping("cart/cartItem/create")
     public CartItem addCartItem(@RequestBody CartItemDTO cartItemDTO ) {
 
-        CartItem cartItem = cartMapper.CartItemDTOToCartItem(cartItemDTO);
+        CartItem cartItem = cartMapper.cartItemDTOToCartItem(cartItemDTO);
+
+        Cart cart = cartServiceimpl.findByIdCart(cartItemDTO.getIdCart());
+
+        cartItem.setCart(cart);
+
+        cart.getListCartItem().add(cartItem);
+
+        cartServiceimpl.createCart(cart);
        
         cartServiceimpl.createCartItemBaru(cartItem);
         

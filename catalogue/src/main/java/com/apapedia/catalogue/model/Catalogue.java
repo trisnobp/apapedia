@@ -26,7 +26,11 @@ public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "nama", nullable = false)
+    private String name;
+
+    @Column(name = "image", columnDefinition =  "TEXT",nullable = false)
+
     private String image;
 
     @Column(name = "harga", nullable = false)
@@ -44,9 +48,11 @@ public class Catalogue {
     @Column(name = "stok", nullable = false)
     private int stock;
 
+    // gilang : mencegah error ketika berkomunikasi dengan microservice lain menggunakan Restful API
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+   
     private Category category;
 
     @Column(name = "is_deleted")

@@ -11,5 +11,6 @@ public interface CartService {
     Cart createCart(Cart cart);
     CartItem createCartItemBaru(CartItem cartItem);
     Cart getCartByUserId(UUID userId);
+    Cart findByIdCart(UUID idCart);
 
 }
