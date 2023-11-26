@@ -68,7 +68,7 @@
       <div class="col-md-6 d-flex flex-column align-items-center">
         <div class="align-items-start">
           <h1 class="text-start">Log In</h1>
-          <form th:action="@{/login}" method="post">
+          <form th:action="@{/login}" id="form-login" method="POST">
 
             <div class="mb-4 pt-3">
               <label for="username" class="form-label">Username</label>
@@ -84,14 +84,62 @@
             <div class="center-button">
               <button type="submit" class="primary-button">Log In</button>
             </div>
-
-            <p class="text-secondary mt-3">Don't have an account yet?<a th:href="@{/register}" class="btn btn-link">Register</a></p>
           </form>
+
+          <div id="message">
+          </div>
+
+          <p class="text-secondary mt-3">Don't have an account yet?<a th:href="@{/register}" class="btn btn-link">Register</a></p>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  var endpoint = "http://localhost:8083"
+  console.log("Script is running");
+  $(document).on("submit", "#form-login", function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      url: "http://localhost:8080/api/account/sellerLogin",
+      data: JSON.stringify({
+        usernameOrEmail: $("#username").val(),
+        password: $("#password").val(),
+      }),
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/json");
+      },
+      success: function(data) {
+      console.log('Response Data:', data);
+      console.log(data.token);
+        if (data.status == true) {
+          localStorage.setItem("token", JSON.stringify(data.token));
+          let htmlString = ``;
+          htmlString += `\n
+          <div class="success-message">${data.message}</div>
+          `;
+          document.getElementById("message").innerHTML = htmlString;
+
+          setTimeout(function(){
+            document.location.href = endpoint;
+          }, 1500)
+        } else {
+          let htmlString = ``
+          htmlString += `\n
+          <div class="error-message">${data.message}</div>
+          `
+          document.getElementById("message").innerHTML = htmlString
+        }
+        }
+      })
+    });
+
+</script>
 
 </body>
 
