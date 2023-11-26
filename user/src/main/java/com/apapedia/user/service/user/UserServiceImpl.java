@@ -32,6 +32,8 @@ public class UserServiceImpl implements UserService {
         // Check if the role is Seller
         if (user.getRole() == Role.SELLER) {
             userDTO.setCategory(getSellerCategory(id));
+        } else {
+            userDTO.setCartId(getCustomerCartId(id));
         }
         return userDTO;
     }

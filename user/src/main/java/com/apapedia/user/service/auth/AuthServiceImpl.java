@@ -1,5 +1,6 @@
 package com.apapedia.user.service.auth;
 
+import com.apapedia.user.config.JwtService;
 import com.apapedia.user.dto.request.LoginRequest;
 import com.apapedia.user.dto.response.CreateUserCartResponse;
 import com.apapedia.user.dto.response.LoginResponse;
@@ -13,12 +14,16 @@ import com.apapedia.user.repository.CustomerDb;
 import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -31,6 +36,11 @@ public class AuthServiceImpl implements AuthService {
     SellerDb sellerDb;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     private final WebClient webClient;
 
@@ -48,14 +58,14 @@ public class AuthServiceImpl implements AuthService {
         var response = RegisterResponse.builder();
 
         if (findUserByEmail != null || findUserByUsername != null || findUserByPassword != null) {
-            response.status(400); // Indicates failure
-            response.message("Username atau Email sudah pernah digunakan.");
+            response.status(false); // Indicates failure
+            response.message("Username or Email has been used.");
 
             return response.build();
 
         } else {
-            response.status(200); // Indicates success
-            response.message("User berhasil didaftarkan.");
+            response.status(true); // Indicates success
+            response.message("User is successfully registered.");
             // Assign Roles
             var role = (request.getCategory() != null) ? Role.SELLER : Role.CUSTOMER;
             // Save user
@@ -63,7 +73,8 @@ public class AuthServiceImpl implements AuthService {
                     .email(request.getEmail()).name(request.getName())
                     .role(role).username(request.getUsername())
                     .password(passwordEncoder.encode(request.getPassword()))
-                    .createdAt(LocalDateTime.now()).build();
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now()).build();
 
             // Simpan user ke database
             var savedUser = userDb.save(user);
@@ -74,11 +85,11 @@ public class AuthServiceImpl implements AuthService {
                 var cartDataResponse = this.webClient
                         .post()
                         .uri("/cart/create/" + savedUser.getId())
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .retrieve()
                         .bodyToMono(CreateUserCartResponse.class).block();
 
-                var customer = Customer.builder().userId(savedUser.getId()).cartId(cartDataResponse.getCartId()).build();
+
+                var customer = Customer.builder().userId(savedUser.getId()).cartId(cartDataResponse.getIdCart()).build();
                 customerDb.save(customer);
             } else {
                 var seller = Seller.builder().userId(savedUser.getId()).category(request.getCategory()).build();
@@ -90,7 +101,70 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse loginForSeller(LoginRequest request) {
+        var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
+                : userDb.findByUsername(request.getUsernameOrEmail()).get();
+
+        if (user.getRole().getRoleName().equals("CUSTOMER")) {
+            return LoginResponse.builder().status(false)
+                    .message("Account isn't registered as Seller.").build();
+        }
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsernameOrEmail(),
+                        request.getPassword()
+                )
+        );
+
+        var jwtToken = jwtService.createToken(user);
+        return LoginResponse.builder()
+                .status(true)
+                .message("You are successfully logged in!")
+                .token(jwtToken)
+                .build();
+    }
+
+    @Override
+    public LoginResponse loginForCustomer(LoginRequest request) {
+        var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
+                : userDb.findByUsername(request.getUsernameOrEmail()).get();
+
+        if (user.getRole().getRoleName().equals("SELLER")) {
+            return LoginResponse.builder().status(false)
+                    .message("Account isn't registered as Customer.").build();
+        }
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsernameOrEmail(),
+                        request.getPassword()
+                )
+        );
+
+        var jwtToken = jwtService.createToken(user);
+        return LoginResponse.builder()
+                .status(true)
+                .message("You are successfully logged in!")
+                .token(jwtToken)
+                .build();
+    }
+
+    @Override
+    public LoginResponse loginWithSSO(LoginRequest request) {
         return null;
+    }
+
+    // Buat cek apakah input berupa email atau bukan
+    public boolean isInputEmail(String request) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        if (request == null)
+            return false;
+        return pat.matcher(request).matches();
     }
 }

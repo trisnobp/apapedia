@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CreateUserCartResponse {
 
+    private UUID idCart;
     private UUID userId;
-    private UUID cartId;
     private long totalPrice;
 }
