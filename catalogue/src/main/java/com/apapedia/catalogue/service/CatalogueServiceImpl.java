@@ -39,6 +39,7 @@ public class CatalogueServiceImpl implements CatalogueService{
         newCatalogue.setProductDesc(catalogueDTO.getProductDesc());
         newCatalogue.setStock(catalogueDTO.getStock());
         newCatalogue.setImage(catalogueDTO.getImage());
+         newCatalogue.setName(catalogueDTO.getName());
     
         
         return catalogueDb.save(newCatalogue);

@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.OrderItem;
+import com.apapedia.order.model.OrderItemId;
 
 @Repository
-public interface OrderItemDb extends JpaRepository<OrderItem,OrderItemDb> {
+public interface OrderItemDb extends JpaRepository<OrderItem,OrderItemId> {
 
 
-
-    
+    OrderItem save(OrderItem orderItem);
 } 

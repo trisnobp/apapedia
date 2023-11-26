@@ -2,6 +2,9 @@ package com.apapedia.order.model;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -23,19 +26,21 @@ import lombok.Setter;
 public class OrderItem {
 
     @EmbeddedId
-    private OrderItemId orderItemId;
+    @Column(name = "id_order_item")
+    private OrderItemId orderItemId ;
     @Column(name = "id_product")
     private UUID productId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_order", referencedColumnName = "id_order")
+    @JsonBackReference
     private Order order;
 
     @Column(name = "quantity")
     private Integer quantity ;
 
     @Column(name = "product_name")
-    private Integer productName;
+    private String productName;
 
     @Column(name = "product_price")
     private Integer productPrice;

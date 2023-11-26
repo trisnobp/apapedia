@@ -1,36 +1,29 @@
-package com.apapedia.catalogue.model;
+package com.apapedia.frontend.DTO.request;
+
 
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.validation.constraints.Size;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "category") 
-public class Category {
-    @Id
+
+public class CategoryDTO {
+    
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "nama", nullable = false)
+   
     @Enumerated(EnumType.STRING)
     private CategoryName namaCategory;
 
-    // gilang : mencegah error ketika berkomunikasi dengan microservice lain menggunakan Restful API
-    @JsonManagedReference
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Catalogue> catalogs;
-    
     public enum CategoryName {
         AKSESORIS_FASHION("Aksesoris Fashion"),
         BUKU_ALAT_TULIS("Buku & Alat Tulis"),
@@ -56,7 +49,5 @@ public class Category {
         public String toString() {
             return displayName;
         }
-
-        
     }
 }
