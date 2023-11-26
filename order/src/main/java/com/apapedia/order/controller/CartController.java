@@ -53,13 +53,13 @@ public class CartController {
 
         var listCart = cartServiceimpl.getCartByUserId(userId);
 
-        return ResponseEntity.ok(cart.getListCartItem());
+        return ResponseEntity.ok(listCart.getListCartItem());
     }
 
     @PostMapping("/cartItem/create")
     public CartItem addCartItem(@RequestBody CartItemDTO cartItemDTO ) {
 
-        CartItem cartItem = cartMapper.cartItemDTOToCartItem(cartItemDTO);
+        CartItem cartItem = cartMapper.CartItemDTOToCartItem(cartItemDTO);
 
         Cart cart = cartServiceimpl.findByIdCart(cartItemDTO.getIdCart());
 
