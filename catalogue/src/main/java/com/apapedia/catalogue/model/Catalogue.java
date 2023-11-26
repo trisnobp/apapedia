@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.UUID;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -18,7 +18,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@SQLDelete(sql = "UPDATE catalogue SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE catalog SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted=false")
 @Table(name = "catalog") 
 public class Catalogue {
@@ -26,14 +26,14 @@ public class Catalogue {
     @Id
     private UUID id = UUID.randomUUID();
 
-    @Column(name = "nama", nullable = false)
-    private String name;
-
     @Column(name = "image", nullable = false)
     private String image;
 
     @Column(name = "harga", nullable = false)
     private BigDecimal price;
+
+    @Column(name = "id_seller", nullable = false)
+    private UUID sellerId;
 
     @Column(name = "nama_produk", nullable = false)
     private String productName;
@@ -44,6 +44,7 @@ public class Catalogue {
     @Column(name = "stok", nullable = false)
     private int stock;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
