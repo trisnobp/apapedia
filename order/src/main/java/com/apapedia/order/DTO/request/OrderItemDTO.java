@@ -1,8 +1,10 @@
-package com.apapedia.order.dto.request;
+package com.apapedia.order.DTO.request;
 
 import java.util.UUID;
 
 import com.apapedia.order.model.Cart;
+import com.apapedia.order.model.Order;
+import com.apapedia.order.model.OrderItemId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
@@ -17,16 +19,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CartItemDTO {
 
-    private UUID idCartItem ;
-
-    private UUID idCart;
-  
-
+public class OrderItemDTO {
+    private OrderItemId orderItemId ;
     private UUID productId;
 
-    private Cart Cart;
 
-    private Integer quantity ; 
+
+    private Order order;
+
+    private Integer quantity ;
+
+    private Integer productName;
+
+
+    private Integer productPrice;
+
 }

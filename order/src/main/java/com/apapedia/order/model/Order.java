@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,18 +51,17 @@ public class Order {
     @Column(name = "total_price")
     private Integer totalPrice ;
 
-//     @ManyToOne(fetch = FetchType.EAGER)
-//     @JoinColumn(name = "id_customer", referencedColumnName = "id_customer")
-//     @Column(name = "id_customer")
-//     private  Customer customer ;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//     @JoinColumn(name = "id_seller", referencedColumnName = "id_seller")
-//     @Column(name = "id_seller")
-//     private Seller seller;
+    @Column(name = "customer")
+    private  UUID customer ;
+
+
+    @Column(name = "seller")
+    private UUID seller;
 
     
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> listOrderItem;
 
 }

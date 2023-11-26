@@ -1,5 +1,6 @@
 package com.apapedia.order.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +51,7 @@ public class CartController {
     @GetMapping("/cartItem/{userId}")
     public ResponseEntity<List<CartItem>> getCartItem(@PathVariable("userId") UUID userId){
 
-        Cart cart = cartServiceimpl.getCartByUserId(userId);
+        var listCart = cartServiceimpl.getCartByUserId(userId);
 
         return ResponseEntity.ok(cart.getListCartItem());
     }
@@ -58,7 +59,15 @@ public class CartController {
     @PostMapping("/cartItem/create")
     public CartItem addCartItem(@RequestBody CartItemDTO cartItemDTO ) {
 
-        CartItem cartItem = cartMapper.CartItemDTOToCartItem(cartItemDTO);
+        CartItem cartItem = cartMapper.cartItemDTOToCartItem(cartItemDTO);
+
+        Cart cart = cartServiceimpl.findByIdCart(cartItemDTO.getIdCart());
+
+        cartItem.setCart(cart);
+
+        cart.getListCartItem().add(cartItem);
+
+        cartServiceimpl.createCart(cart);
        
         cartServiceimpl.createCartItemBaru(cartItem);
         
