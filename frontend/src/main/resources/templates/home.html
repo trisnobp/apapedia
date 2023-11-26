@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <title>APAPEDIA</title>
+</head>
+<body>
+<div id="navbar-unauthenticated">
+    <nav th:replace="~{fragments/navbar_not_loggedin :: navbar}"></nav>
+</div>
+<div id="navbar-authenticated">
+    <nav th:replace="~{fragments/navbar :: navbar(2)}"></nav>
+</div>
+
+<div id="carouselExampleControls" class="carousel slide mt-5" data-bs-ride="carousel">
+    <div class="carousel-inner ml-5">
+        <div class="carousel-item active">
+            <div class="slider_item-box">
+                <div class="slider_item-container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="slider_item-detail">
+                                    <div>
+                                        <h1>
+                                            Selamat datang di <br />
+                                            APAPEDIA
+                                        </h1>
+                                        <p>
+                                            There are many variations of passages of Lorem
+                                            Ipsum available, but the majority have suffered
+                                            alteration in some form, by injected humour, or
+                                            randomised words which don't look even slightly
+                                            believable.
+                                        </p>
+                                        <div class="d-flex">
+                                            <a href="" class="text-uppercase custom_orange-btn mr-3">
+                                                Shop Now
+                                            </a>
+                                            <a href="" class="text-uppercase custom_dark-btn">
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="slider_img-box">
+                                    <div>
+                                        <img src="images/slide-img.png" alt="" class="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="slider_item-box">
+                <div class="slider_item-container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="slider_item-detail">
+                                    <div>
+                                        <h1>
+                                            Welcome to <br />
+                                            Our Fruits Shop
+                                        </h1>
+                                        <p>
+                                            There are many variations of passages of Lorem
+                                            Ipsum available, but the majority have suffered
+                                            alteration in some form, by injected humour, or
+                                            randomised words which don't look even slightly
+                                            believable.
+                                        </p>
+                                        <div class="d-flex">
+                                            <a href="" class="text-uppercase custom_orange-btn mr-3">
+                                                Shop Now
+                                            </a>
+                                            <a href="" class="text-uppercase custom_dark-btn">
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="slider_img-box">
+                                    <div>
+                                        <img src="images/slide-img.png" alt="" class="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="slider_item-box">
+                <div class="slider_item-container">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="slider_item-detail">
+                                    <div>
+                                        <h1>
+                                            Welcome to <br />
+                                            Our Fruits Shop
+                                        </h1>
+                                        <p>
+                                            There are many variations of passages of Lorem
+                                            Ipsum available, but the majority have suffered
+                                            alteration in some form, by injected humour, or
+                                            randomised words which don't look even slightly
+                                            believable.
+                                        </p>
+                                        <div class="d-flex">
+                                            <a href="" class="text-uppercase custom_orange-btn mr-3">
+                                                Shop Now
+                                            </a>
+                                            <a href="" class="text-uppercase custom_dark-btn">
+                                                Contact Us
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="slider_img-box">
+                                    <div>
+                                        <img src="images/slide-img.png" alt="" class="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+</body>
+<script>
+    $(document).ready(function() {
+        console.log('Script is running');
+        var token = localStorage.getItem("token");
+        console.log('User Token:', token);
+        if (token == null) {
+            console.log('User is not authenticated');
+            $("#navbar-authenticated").hide();
+        } else {
+            console.log('User is authenticated');
+        $("#navbar-unauthenticated").hide();
+    }
+     });
+</script>
+</script>
+</html>
