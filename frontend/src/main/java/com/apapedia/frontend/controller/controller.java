@@ -19,8 +19,6 @@ import com.apapedia.frontend.DTO.request.GetCatalogueDetailDTO;
 import com.apapedia.frontend.service.CatalogueServiceClient;
 
 @Controller
-// @RestController
-@RequestMapping("/frontend")
 public class controller {
 
     @Autowired
