@@ -7,14 +7,47 @@
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
     <title>APAPEDIA</title>
+    <style>
+        .btn-outline-orange {
+            color: #ff5722;
+            background-color: transparent;
+            border-color: #ff5722;
+        }
+
+        .btn-outline-orange:hover {
+            color: #fff;
+            background-color: #FF8C00;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            border-radius: 50%;
+            color: #000;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
-<div id="navbar-unauthenticated" class="mx-4">
+<div th:if="${isLoggedIn == false}" class="mx-4">
     <nav th:replace="~{fragments/navbar_not_loggedin :: navbar}"></nav>
 </div>
-<div id="navbar-authenticated" class="mx-4">
-    <nav th:replace="~{fragments/navbar :: navbar(2)}"></nav>
+<div th:if="${isLoggedIn == true}" class="mx-4">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 </div>
+
+<br>
+<div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
 
 <div id="carouselExampleControls" class="carousel slide mt-5" data-bs-ride="carousel">
     <div class="carousel-inner ml-5">
@@ -26,23 +59,27 @@
                             <div class="col-md-6 mt-4">
                                 <div class="slider_item-detail">
                                     <div>
-                                        <h1>
-                                            Welcome to <br />
+                                        <h1 th:if="${isLoggedIn == true}">
+                                            Selamat Datang, <br />
+                                            <h1 th:text="${name} + '!'"></h1>
+                                        </h1>
+
+                                        <h1 th:if="${isLoggedIn == false}">
+                                            Selamat Datang di <br />
                                             APAPEDIA
                                         </h1>
+                                        <br>
                                         <p>
-                                            There are many variations of passages of Lorem
-                                            Ipsum available, but the majority have suffered
-                                            alteration in some form, by injected humour, or
-                                            randomised words which don't look even slightly
-                                            believable.
+                                            APAPEDIA adalah sebuah platform e-commerce yang menyediakan pengalaman belanja online yang inovatif dan komprehensif.
+                                            Dengan fokus pada keamanan, kenyamanan, dan beragamnya pilihan produk,
+                                            APAPEDIA bertujuan memberikan layanan terbaik kepada pelanggan dari berbagai kalangan.
                                         </p>
                                         <div class="d-flex">
-                                            <a href="" class="text-uppercase mr-3">
-                                                Shop Now
+                                            <a th:if="${isLoggedIn == false}" class="btn btn-outline-orange mr-3" onClick="document.getElementById('catalog1').scrollIntoView();">
+                                                Lihat Katalog
                                             </a>
-                                            <a href="" class="text-uppercase">
-                                                Contact Us
+                                            <a th:if="${isLoggedIn == true}" class="btn btn-outline-orange mr-3" onClick="document.getElementById('catalog2').scrollIntoView();">
+                                                Lihat Katalog
                                             </a>
                                         </div>
                                     </div>
@@ -69,22 +106,21 @@
                                 <div class="slider_item-detail">
                                     <div>
                                         <h1>
-                                            Welcome to <br />
-                                            Our Fruits Shop
+                                            Pantau Penjualan <br />
+                                            Produk Anda
                                         </h1>
+                                        <br>
                                         <p>
-                                            There are many variations of passages of Lorem
-                                            Ipsum available, but the majority have suffered
-                                            alteration in some form, by injected humour, or
-                                            randomised words which don't look even slightly
-                                            believable.
+                                            Dalam platform e-commerce kami, kami menyediakan fitur khusus untuk penjual yang dirancang
+                                            agar mereka dapat dengan mudah memantau dan mengelola penjualan mereka. Penjual dapat melihat produk terlaris mereka,
+                                            membantu mereka untuk lebih memahami tren pasar dan preferensi pelanggan.
                                         </p>
                                         <div class="d-flex">
-                                            <a href="" class="text-uppercase">
-                                                Shop Now
+                                            <a th:if= "${isLoggedIn == false}" class="btn btn-outline-orange mr-3" onClick="document.getElementById('catalog1').scrollIntoView();">
+                                                Lihat Katalog
                                             </a>
-                                            <a href="" class="text-uppercase">
-                                                Contact Us
+                                            <a th:if= "${isLoggedIn == true}" class="btn btn-outline-orange mr-3" onClick="document.getElementById('grafik').scrollIntoView();">
+                                                Lihat Grafik Penjualan
                                             </a>
                                         </div>
                                     </div>
@@ -115,75 +151,124 @@
 
 <div class="container mt-5 mb-5">
     <br>
-    <h1 class="text-center mb-5">All Catalogues</h1>
+    <h1 th:if="${isLoggedIn == true}" id="grafik" class="text-center mb-5">Sales Graph</h1>
 
+    <br>
+    <div>
+        <h1 id="catalog1" th:if="${isLoggedIn == false}" class="text-center mb-5">All Catalogues</h1>
+        <h1 id="catalog2"th:if="${isLoggedIn == true}" class="text-center mb-5">My Catalogues</h1>
 
-    <div class="row pl-4 pr-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Orange</h5>
-                    <p class="card-text">
-                        There are many variations of passages of Lorem Ipsum
-                        available, but the majority have suffered alteration in some
-                        form, by injected humour, or randomised words which don't look
-                        even slightly believable.
-                    </p>
+        <a th:href="@{/catalogue/add}" th:if="${isLoggedIn == true}" type="button" class="btn btn-md btn-warning">Add Product</a>
+        <br><br>
+
+        <div th:if="${isLoggedIn == false} and ${isEmpty == false}">
+            <select class="form-control form-select" id="filter">
+                <option value="productName">Filter by Product Name</option>
+                <option value="productPrice">Filter by Product Price</option>
+                <option value="sortPriceOrName">Sort Products</option>
+            </select>
+
+            <form method="POST">
+                <div id="productName" class="row">
+                    <div class="col-md-8">
+                        <input type="text" name="productName" class="form-control" placeholder="Search Product Name">
+                    </div>
+                    <div class="col-md-4">
+                        <button style="background: #FF8C00;" type="submit" class="btn form-control text-light">Search Product</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="productPrice" class="row">
+                <form method="GET" th:action="@{/filter-permintaan-pengiriman}">
+                    <div class="mx-5 mt-2 mb-4">
+                        <div class="d-flex flex-row text-center mb-3">
+                            <input type="number" class="form-control" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" required>
+                            <h6 class="mx-3">hingga</h6>
+                            <input type="number" class="form-control" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" required>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-sm text-light" type="submit" style="width: 150px; background: #FF8C00;">Search Product</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="sortPriceOrName" class="row">
+                <form method="GET" th:action="@{/filter-permintaan-pengiriman}">
+                    <div class="mx-5 mt-2 mb-4">
+                        <div class="d-flex flex-row text-center mb-3">
+                            <select class="form-control form-select" id="item">
+                                <option value="product">Product Name</option>
+                                <option value="price">Product Price</option>
+                            </select>
+                            <h6 class="mx-3">and</h6>
+                            <select class="form-control form-select" id="order">
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-sm text-light" type="submit" style="width: 150px; background: #FF8C00;">Search Product</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br><br>
+
+            <div class="row pl-4 pr-4">
+                <div th:each="catalog: ${allCatalogue}" class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <img th:src="'data:image/jpeg;base64,' + ${catalog.image}" width="180" height="300" alt="product_image">
+                                <br><br>
+                            </div>
+                            <h5 th:text="${catalog.productName}" class="card-title"></h5>
+                            <p th:text="'Rp'+${catalog.price}" class="card-text"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Grapes</h5>
-                    <p class="card-text">
-                        There are many variations of passages of Lorem Ipsum
-                        available, but the majority have suffered alteration in some
-                        form, by injected humour, or randomised words which don't look
-                        even slightly believable.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Gauva</h5>
-                    <p class="card-text">
-                        There are many variations of passages of Lorem Ipsum
-                        available, but the majority have suffered alteration in some
-                        form, by injected humour, or randomised words which don't look
-                        even slightly believable.
-                    </p>
+
+        <div th:if="${isLoggedIn == true} and ${isEmpty == false}">
+            <div class="row pl-4 pr-4">
+                <div th:each="catalog: ${sellerCatalogue}" class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <img th:src="'data:image/jpeg;base64,' + ${catalog.image}" width="180" height="300" alt="product_image">
+                                <br><br>
+                            </div>
+                            <h5 th:text="${catalog.productName}" class="card-title"></h5>
+                            <p th:text="'Rp'+${catalog.price}" class="card-text"></p>
+                            <a type="button" class="btn btn-md btn-warning" th:href="@{/catalogue/{id}/update(id=${catalog.id})}">Edit Product</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div th:if="${isEmpty == true}" class="text-center mt-4">
+        <h5>Kosong Bang!</h5>
+    </div>
 </div>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        var initialOption = $('#filter').val();
+        $("#" + initialOption).show();
+        $("#productName, #productPrice, #sortPriceOrName").not("#" + initialOption).hide();
 
-</body>
-<script>
-    $(document).ready(function() {
-        console.log('Script is running');
-        var token = localStorage.getItem("token");
-        console.log('User Token:', token);
-        if (token == null) {
-            console.log('User is not authenticated');
-            $("#navbar-authenticated").hide();
-        } else {
-            console.log('User is authenticated');
-            $("#navbar-unauthenticated").hide();
-        }
-
-        $('#logout').on('click', function() {
-            console.log("this is running");
-            var endpoint = "http://localhost:8083";
-            localStorage.removeItem("token");
-            setTimeout(function() {
-                document.location.href = endpoint;
-            }, 1500);
+        $('#filter').on('change', function() {
+            var value = $(this).val();
+            $("#productName, #productPrice, #sortPriceOrName").hide();
+            $("#" + value).show();
         });
-     });
+    });
 </script>
-</script>
+</body>
 </html>

@@ -1,6 +1,8 @@
 package com.apapedia.catalogue.service;
 
 import com.apapedia.catalogue.DTO.request.CreateCatalogueRequestDTO;
+import com.apapedia.catalogue.DTO.request.UpdateCatalogueRequestDTO;
+import com.apapedia.catalogue.DTO.response.ResponseCatalogueDTO;
 import com.apapedia.catalogue.model.Catalogue;
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +20,5 @@ public interface CatalogueService {
     public List<Catalogue> findByProductName(String productName);
 
     public List<Catalogue> getCataloguesBySellerId(UUID sellerId);
+    public Catalogue updateCatalogue(UpdateCatalogueRequestDTO catalogueDTO);
 }

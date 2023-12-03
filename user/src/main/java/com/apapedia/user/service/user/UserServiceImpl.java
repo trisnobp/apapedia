@@ -39,8 +39,10 @@ public class UserServiceImpl implements UserService {
         var userDTO = userMapper.userToUserDataResponse(user);
         // Check if the role is Seller
         if (user.getRole() == Role.SELLER) {
+            userDTO.setRole("Seller");
             userDTO.setCategory(getSellerCategory(id));
         } else {
+            userDTO.setRole("Customer");
             userDTO.setCartId(getCustomerCartId(id));
         }
         return userDTO;

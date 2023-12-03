@@ -1,4 +1,4 @@
-package com.apapedia.user.dto.response;
+package com.apapedia.frontend.DTO.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDataResponse {
+public class UserDTO {
     private UUID id;
     private String name;
     private String username;

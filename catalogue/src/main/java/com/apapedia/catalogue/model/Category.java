@@ -1,6 +1,8 @@
 package com.apapedia.catalogue.model;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -56,7 +58,6 @@ public class Category {
         public String toString() {
             return displayName;
         }
-
         
     }
 }

@@ -1,22 +1,18 @@
-package com.apapedia.catalogue.DTO.request;
+package com.apapedia.frontend.DTO.request;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.apapedia.catalogue.model.Category;
-
 @AllArgsConstructor
 @NoArgsConstructor
-@Data 
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CreateCatalogueRequestDTO {
     private UUID sellerId;
     private BigDecimal price;
@@ -24,5 +20,6 @@ public class CreateCatalogueRequestDTO {
     private String productDesc;
     private String category;
     private int stock;
+    private MultipartFile file;
     private String image;
 }

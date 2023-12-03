@@ -9,10 +9,10 @@
 </head>
 <body>
 <div class="container">
-    <nav th:fragment="navbar(active)" class="navbar navbar-expand-lg navbar-light bg-light pt-3">
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light pt-3">
         <div class="container-fluid">
             <div class="collapse navbar-collapse">
-                <a class="navbar-brand fw-bold text-dark ms-3 ml-3" href="">
+                <a class="navbar-brand fw-bold text-dark ms-3 ml-3" href="/">
                     <img src="images/logo.png" width="60" height="60" alt="" class="ml-3"/>
                     <span class="ml-4">APAPEDIA</span>
                 </a>
@@ -25,13 +25,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item px-3">
-                        <a class="nav-link text-dark" th:href="@{/login}" th:style="${active == 'order'} ? 'color: #FF8C00;'">Order History</a>
+                        <a class="nav-link" th:href="@{/login}" style="color: #FF8C00;">Order History</a>
                     </li>
                     <li class="nav-item px-3">
-                        <a class="nav-link text-dark" th:href="@{/register}" th:style="${active == 'profile'} ? 'color: #FF8C00;'">Profile</a>
+                        <a class="nav-link" th:href="@{/register}" style="color: #FF8C00;">Profile</a>
                     </li>
                     <li class="nav-item px-3">
-                        <a class="nav-link text-dark" id="logout" th:style="${active == 'profile'} ? 'color: #FF8C00;'">Logout</a>
+                        <a class="nav-link" th:href="@{/logout}" id="logout" style="color: #FF8C00;">Logout</a>
                     </li>
                 </ul>
             </div>

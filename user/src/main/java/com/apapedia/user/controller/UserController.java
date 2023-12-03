@@ -1,10 +1,13 @@
 package com.apapedia.user.controller;
 
+import com.apapedia.user.config.JwtService;
+import com.apapedia.user.dto.request.TokenRequest;
 import com.apapedia.user.dto.request.UpdateUserDataRequest;
 import com.apapedia.user.dto.response.UpdateUserBalanceResponse;
 import com.apapedia.user.dto.response.UpdateUserDataResponse;
 import com.apapedia.user.dto.response.UserDataResponse;
 import com.apapedia.user.service.user.UserService;
+import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,23 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    JwtService jwtService;
+
+    @GetMapping("")
+    public ResponseEntity<String> getLoggedInUserId(
+            @RequestHeader("Authorization") String token
+    ) {
+        try {
+            Claims claims = jwtService.extractAllClaims(token.substring(7));
+            return ResponseEntity.ok((String) claims.get("id"));
+        } catch (Exception e) {
+            return ResponseEntity.ok("Invalid Token");
+        }
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserDataResponse> getUser(
+    public ResponseEntity<UserDataResponse> getUserById(
             @RequestHeader("Authorization") String token,
             @PathVariable("id") UUID id
     ) {

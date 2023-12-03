@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Register</title>
+    <title>Add Product</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -50,56 +50,58 @@
 </head>
 
 <body>
+<div class="mx-4">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+</div>
+
 <div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh;">
     <div class="col-md-8">
         <div class="align-items-start">
-            <h1 class="text-start">Register</h1>
-            <form th:object="${registerDTO}" th:action="@{/register}" method="post">
+            <h1 class="text-start">Product Form</h1>
+            <form th:object="${catalogueDTO}" th:action="@{/catalogue/add}" method="POST" enctype="multipart/form-data">
+                <input class="form-control" type="hidden" th:field="*{sellerId}"/>
 
                 <div class="row mb-4 pt-3">
                     <div class="col-md-6">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Username" th:field="*{username}" required>
+                        <label for="product" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="product" placeholder="Product Name" th:field="*{productName}" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password" th:field="*{password}" required>
+                        <label for="price" class="form-label">Price</label>
+                        <input min="1" type="number" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" autofocus class="form-control" id="price" placeholder="Product Price" th:field="*{price}" required>
                     </div>
                 </div>
 
                 <div class="row mb-4 pt-3">
                     <div class="col-md-6">
-                        <label for="fullName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Full Name" th:field="*{name}" required>
+                        <label for="productdesc" class="form-label">Product Description</label>
+                        <textarea class="form-control" id="productdesc" placeholder="Product Description" th:field="*{productDesc}" required></textarea>
                     </div>
                     <div class="col-md-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Email" th:field="*{email}" required>
+                        <label for="stock" class="form-label">Stock</label>
+                        <input min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" type="number" class="form-control" id="stock" placeholder="Product Stock" th:field="*{stock}" required>
                     </div>
                 </div>
 
                 <div class="row mb-4 pt-3">
                     <div class="col-md-6">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="Address" th:field="*{address}" required>
+                        <label for="avatar" class="form-label">Product Image (.jpeg/.jpg)</label>
+                        <input type="file" id="avatar" name="avatar" accept="image/jpeg" th:field="*{file}" required/>
                     </div>
                     <div class="col-md-6">
                         <label for="category" class="form-label">Category</label>
-                        <select class="form-select" id="category" name="category" th:field="*{category}">
-                            <option value="Official Store">Official Store</option>
-                            <option value="Biasa">Biasa</option>
+                        <select class="form-select" id="category" th:field="*{category}">
+                            <option th:each="category : ${listCategory}" th:value="${category.categoryName}" th:text="${category.categoryName}"></option>
                         </select>
                     </div>
                 </div>
 
                 <div class="center-button">
-                    <button style="background: #FF8C00;" type="submit" class="primary-button text-light">Register</button>
+                    <button style="background: #FF8C00;" type="submit" class="primary-button text-light">Add Product</button>
                 </div>
             </form>
 
             <div class="ml-3 mt-3 text-danger" id="message" th:text="${error}" th:if="${error}"></div>
-
-            <p class="text-secondary mt-3">Already registered?<a th:href="@{/login}" class="btn btn-link">Log In</a></p>
         </div>
     </div>
 </div>
