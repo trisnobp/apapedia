@@ -11,13 +11,12 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -29,11 +28,74 @@ public class CatalogueController {
     @Autowired
     UserService userService;
 
+    @GetMapping("/search")
+    public String filterProductByName(
+            @RequestParam(name = "productName", required = false) String nama,
+            Model model
+    ) {
+        List<CatalogueDetailDTO> listOfCatalogue = catalogueServiceClient.getCatalogsByName(nama).getBody();
+        if (listOfCatalogue.isEmpty()) { // If filter by Product Name
+            model.addAttribute("searchMode", true);
+            model.addAttribute("isLoggedIn", false);
+            model.addAttribute("isEmpty", true);
+        }
+        model.addAttribute("searchMode", true);
+        model.addAttribute("isLoggedIn", false);
+        model.addAttribute("allCatalogue", listOfCatalogue);
+        model.addAttribute("isEmpty", false);
+
+        return "home";
+    }
+
+    @GetMapping("/searchByPrice")
+    public String filterByPriceRange(
+            @RequestParam(name = "startPrice", required = false) BigDecimal startPrice,
+            @RequestParam(name = "endPrice", required = false) BigDecimal endPrice,
+            Model model
+    ) {
+        System.out.println(startPrice);
+        System.out.println(endPrice);
+        List<CatalogueDetailDTO> listOfCatalogue = catalogueServiceClient.getCatalogsByPriceRange(startPrice, endPrice).getBody();
+        if (listOfCatalogue.isEmpty()) {
+            model.addAttribute("searchMode", true);
+            model.addAttribute("isLoggedIn", false);
+            model.addAttribute("isEmpty", true);
+        }
+
+        model.addAttribute("searchMode", true);
+        model.addAttribute("isLoggedIn", false);
+        model.addAttribute("allCatalogue", listOfCatalogue);
+        model.addAttribute("isEmpty", false);
+
+        return "home";
+    }
+
+    @GetMapping("/sortProducts")
+    public String filterBySorting(
+            @RequestParam(name = "sortBy", required = false) String sortBy,
+            @RequestParam(name = "order", required = false) String order,
+            Model model
+    ) {
+        List<CatalogueDetailDTO> listOfCatalogue = catalogueServiceClient.getSortedCatalog(sortBy, order).getBody();
+        if (listOfCatalogue.isEmpty()) {
+            model.addAttribute("searchMode", true);
+            model.addAttribute("isLoggedIn", false);
+            model.addAttribute("isEmpty", true);
+        }
+
+        model.addAttribute("searchMode", true);
+        model.addAttribute("isLoggedIn", false);
+        model.addAttribute("allCatalogue", listOfCatalogue);
+        model.addAttribute("isEmpty", false);
+
+        return "home";
+    }
+
     @GetMapping("/catalogue/add")
     public String addCatalogueForm(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         if (session == null || (String) session.getAttribute("token") == null) {
-            return "redirect:/login";
+            return "redirect:/login-sso";
         }
 
         String token = (String) session.getAttribute("token");
@@ -69,7 +131,7 @@ public class CatalogueController {
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Please check your credentials again.");
-            return "redirect:/login";
+            return "redirect:/login-sso";
         }
     }
 
@@ -77,13 +139,12 @@ public class CatalogueController {
     public String updateCatalogueForm(@PathVariable("id") UUID id, HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         if (session == null || (String) session.getAttribute("token") == null) {
-            return "redirect:/login";
+            return "redirect:/login-sso";
         }
 
         String token = (String) session.getAttribute("token");
 
         CatalogueDetailDTO catalogueDTO = catalogueServiceClient.retrieveCatalogue(token, id).getBody();
-        System.out.println(catalogueDTO.getImage());
         model.addAttribute("listCategory", catalogueServiceClient.getAllCategories(token).getBody());
         model.addAttribute("catalogueDTO", catalogueDTO);
         return "form-update-catalogue";
@@ -92,12 +153,11 @@ public class CatalogueController {
     @PostMapping("/catalogue/{id}/update")
     public String updateCatalogue(@ModelAttribute CatalogueDetailDTO catalogueDTO, @PathVariable("id") UUID id, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         try {
-            System.out.println(catalogueDTO.getImage());
             HttpSession session = request.getSession();
             String token = (String) session.getAttribute("token");
 
-            if (catalogueDTO.getFile() != null) {
-                // Ubah format image ke byte, supaya bisa ditampilin
+            // Ubah format image ke byte, supaya bisa ditampilin
+            if (!(catalogueDTO.getFile().getOriginalFilename() == null)) {
                 String fileName = StringUtils.cleanPath(catalogueDTO.getFile().getOriginalFilename());
                 byte[] fileBytes = catalogueDTO.getFile().getBytes();
                 catalogueDTO.setImage(Base64.getEncoder().encodeToString(fileBytes));
@@ -115,7 +175,7 @@ public class CatalogueController {
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Please check your credentials again.");
-            return "redirect:/login";
+            return "redirect:/login-sso";
         }
     }
 

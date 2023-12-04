@@ -1,5 +1,6 @@
 package com.apapedia.catalogue.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,9 +22,19 @@ public interface CatalogueDb extends JpaRepository<Catalogue, UUID> , JpaSpecifi
 
     List<Catalogue> findByStockNotOrderByProductNameAsc(int stock);
 
-    List<Catalogue> findByProductNameContaining(String productName);
+    List<Catalogue> findByProductNameContainingIgnoreCase(String productName);
+
+    List<Catalogue> findByPriceBetween(BigDecimal startPrice, BigDecimal endPrice);
 
     List<Catalogue> findBySellerId(UUID sellerId);
+
+    List<Catalogue> findByOrderByPriceAsc();
+
+    List<Catalogue> findByOrderByPriceDesc();
+
+    List<Catalogue> findByOrderByProductNameAsc();
+
+    List<Catalogue> findByOrderByProductNameDesc();
 
     
 }

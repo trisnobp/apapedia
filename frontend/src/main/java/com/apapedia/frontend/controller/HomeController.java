@@ -90,7 +90,7 @@ public class HomeController {
             var registerResponse = userService.register(registerRequestDTO);
             if (registerResponse.isStatus()) {
                 redirectAttributes.addFlashAttribute("success", registerResponse.getMessage());
-                return "redirect:/login";
+                return "redirect:/login-sso";
             } else {
                 redirectAttributes.addFlashAttribute("error", registerResponse.getMessage());
                 return "redirect:/register";

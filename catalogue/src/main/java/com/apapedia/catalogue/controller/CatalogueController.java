@@ -1,5 +1,7 @@
 package com.apapedia.catalogue.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.UUID;
@@ -85,9 +87,41 @@ public class CatalogueController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Catalogue>> getCatalogsByName(@RequestParam String productName) {
-        List<Catalogue> catalogs = catalogueService.findByProductName(productName);
-        return ResponseEntity.ok(catalogs);
+    public ResponseEntity<List<ResponseCatalogueDTO>> getCatalogsByFilter(
+            @RequestParam(name = "productName", required = false) String nama
+    ) {
+        List<ResponseCatalogueDTO> listOfResponses = new ArrayList<>();
+        List<Catalogue> catalogs = catalogueService.findByProductName(nama);
+        for (var catalog: catalogs) {
+            listOfResponses.add(catalogueMapper.catalogueTOResponseCatalogueDTO(catalog));
+        }
+        return ResponseEntity.ok(listOfResponses);
+    }
+
+    @GetMapping("/searchByPrice")
+    public ResponseEntity<List<ResponseCatalogueDTO>> getCatalogsByPriceRange(
+            @RequestParam(name = "startPrice", required = false) BigDecimal startPrice,
+            @RequestParam(name = "endPrice", required = false) BigDecimal endPrice
+    ) {
+        List<ResponseCatalogueDTO> listOfResponses = new ArrayList<>();
+        List<Catalogue> catalogs = catalogueService.findByPriceRange(startPrice, endPrice);
+        for (var catalog: catalogs) {
+            listOfResponses.add(catalogueMapper.catalogueTOResponseCatalogueDTO(catalog));
+        }
+        return ResponseEntity.ok(listOfResponses);
+    }
+
+    @GetMapping("/sortProducts")
+    public ResponseEntity<List<ResponseCatalogueDTO>> getSortedCatalog(
+            @RequestParam(name = "sortBy", required = false) String sortBy,
+            @RequestParam(name = "order", required = false) String order
+    ) {
+        List<ResponseCatalogueDTO> listOfResponses = new ArrayList<>();
+        List<Catalogue> catalogs = catalogueService.findBySorted(sortBy, order);
+        for (var catalog: catalogs) {
+            listOfResponses.add(catalogueMapper.catalogueTOResponseCatalogueDTO(catalog));
+        }
+        return ResponseEntity.ok(listOfResponses);
     }
 
     @GetMapping("/category/viewall")

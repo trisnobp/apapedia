@@ -162,16 +162,16 @@
         <br><br>
 
         <div th:if="${isLoggedIn == false} and ${isEmpty == false}">
-            <select class="form-control form-select" id="filter">
+            <select class="form-control form-select" id="filter" name="filter">
                 <option value="productName">Filter by Product Name</option>
                 <option value="productPrice">Filter by Product Price</option>
                 <option value="sortPriceOrName">Sort Products</option>
             </select>
 
-            <form method="POST">
+            <form th:action=@{/search} method="GET" id="searchProductForm">
                 <div id="productName" class="row">
                     <div class="col-md-8">
-                        <input type="text" name="productName" class="form-control" placeholder="Search Product Name">
+                        <input type="text" name="productName" id="prodName" class="form-control" placeholder="Search Product Name">
                     </div>
                     <div class="col-md-4">
                         <button style="background: #FF8C00;" type="submit" class="btn form-control text-light">Search Product</button>
@@ -180,12 +180,12 @@
             </form>
 
             <div id="productPrice" class="row">
-                <form method="GET" th:action="@{/filter-permintaan-pengiriman}">
+                <form id="searchProductPrice" method="GET" th:action="@{/searchByPrice}">
                     <div class="mx-5 mt-2 mb-4">
                         <div class="d-flex flex-row text-center mb-3">
-                            <input type="number" class="form-control" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" required>
+                            <input id = "startPrice" name="startPrice" type="number" class="form-control" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" required>
                             <h6 class="mx-3">hingga</h6>
-                            <input type="number" class="form-control" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" required>
+                            <input id="endPrice" name="endPrice" type="number" class="form-control" min="1" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" required>
                         </div>
 
                         <div class="d-flex justify-content-end">
@@ -196,22 +196,22 @@
             </div>
 
             <div id="sortPriceOrName" class="row">
-                <form method="GET" th:action="@{/filter-permintaan-pengiriman}">
+                <form id="sortProduct" method="GET" th:action="@{/sortProducts}">
                     <div class="mx-5 mt-2 mb-4">
                         <div class="d-flex flex-row text-center mb-3">
-                            <select class="form-control form-select" id="item">
+                            <select name="sortBy" class="form-control form-select" id="item">
                                 <option value="product">Product Name</option>
                                 <option value="price">Product Price</option>
                             </select>
-                            <h6 class="mx-3">and</h6>
-                            <select class="form-control form-select" id="order">
+                            <h6 class="mx-3">dan</h6>
+                            <select name="order" class="form-control form-select" id="order">
                                 <option value="asc">Ascending</option>
                                 <option value="desc">Descending</option>
                             </select>
                         </div>
 
                         <div class="d-flex justify-content-end">
-                            <button class="btn btn-sm text-light" type="submit" style="width: 150px; background: #FF8C00;">Search Product</button>
+                            <button class="btn btn-sm text-light" type="submit" style="width: 150px; background: #FF8C00;">Sort Products</button>
                         </div>
                     </div>
                 </form>
@@ -219,7 +219,7 @@
             <br><br>
 
             <div class="row pl-4 pr-4">
-                <div th:each="catalog: ${allCatalogue}" class="col-md-4">
+                <div th:each="catalog: ${allCatalogue}" class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="text-center">
@@ -236,7 +236,7 @@
 
         <div th:if="${isLoggedIn == true} and ${isEmpty == false}">
             <div class="row pl-4 pr-4">
-                <div th:each="catalog: ${sellerCatalogue}" class="col-md-4">
+                <div th:each="catalog: ${sellerCatalogue}" class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="text-center">
@@ -270,5 +270,113 @@
         });
     });
 </script>
+
+<script th:if="${searchMode}">
+    document.addEventListener('DOMContentLoaded', function() {
+        var targetDiv = document.getElementById('catalog1');
+        if (targetDiv) {
+            targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        if (document.getElementById('prodName') != null) {
+            document.getElementById('searchProductForm').addEventListener('submit', function (event) {
+            localStorage.setItem('savedProductName', productNameInput.value);
+            });
+
+            var productNameInput = document.getElementById('prodName');
+            var savedProductName = localStorage.getItem('savedProductName');
+            if (savedProductName) {
+                productNameInput.value = savedProductName;
+            }
+
+            const select = document.getElementById("filter");
+
+            // Restore the selected option from localStorage
+            const savedValue = localStorage.getItem("filter");
+
+            if (savedValue) {
+                select.value = savedValue;
+            }
+
+            // Event listener for when an option is selected
+            select.addEventListener("change", function() {
+                // Get selected value and save to localStorage
+                const selectedValue = select.value;
+                localStorage.setItem("filter", selectedValue);
+            });
+        }
+
+        var searchProductForm = document.getElementById('searchProductPrice');
+        if (searchProductForm) {
+        // Add event listener to the form
+            searchProductForm.addEventListener('submit', function (event) {
+                // Save the input field values to localStorage
+                localStorage.setItem('startPrice', startPriceInput.value);
+                localStorage.setItem('endPrice', endPriceInput.value);
+            });
+
+            // Get the input elements
+            var startPriceInput = document.getElementById('startPrice');
+            var endPriceInput = document.getElementById('endPrice');
+
+            // Retrieve the saved values from localStorage
+            var savedStartPrice = localStorage.getItem('startPrice');
+            var savedEndPrice = localStorage.getItem('endPrice');
+
+            // If saved values are found, set the input field values
+            if (savedStartPrice) {
+                startPriceInput.value = savedStartPrice;
+            }
+
+            if (savedEndPrice) {
+                endPriceInput.value = savedEndPrice;
+            }
+        }
+
+        var searchProductForm = document.getElementById('sortProduct');
+        if (searchProductForm) {
+        // Add event listener to the form
+            searchProductForm.addEventListener('submit', function (event) {
+                // Save the input field values to localStorage
+                localStorage.setItem('sortBy', sortByInput.value);
+                localStorage.setItem('order', orderInput.value);
+            });
+
+            // Get the input elements
+            var sortByInput = document.getElementById('item');
+            var orderInput = document.getElementById('order');
+
+            // Retrieve the saved values from localStorage
+            var savedSortBy = localStorage.getItem('sortBy');
+            var savedOrder = localStorage.getItem('order');
+
+            // If saved values are found, set the input field values
+            if (savedSortBy) {
+                sortByInput.value = savedSortBy;
+            }
+
+            if (savedEndPrice) {
+                orderInput.value = savedOrder;
+            }
+        }
+        // Save the state of dropdown
+        const select = document.getElementById("filter");
+
+        // Restore the selected option from localStorage
+        const savedValue = localStorage.getItem("filter");
+
+        if (savedValue) {
+            select.value = savedValue;
+        }
+
+        // Event listener for when an option is selected
+        select.addEventListener("change", function() {
+             // Get selected value and save to localStorage
+             const selectedValue = select.value;
+             localStorage.setItem("filter", selectedValue);
+        });
+    });
+</script>
+
 </body>
 </html>

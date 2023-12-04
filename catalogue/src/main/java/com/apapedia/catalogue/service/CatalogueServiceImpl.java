@@ -1,5 +1,6 @@
 package com.apapedia.catalogue.service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,10 @@ public class CatalogueServiceImpl implements CatalogueService{
         // Update catalogue
         catalogueById.setCategory(newCategory);
         catalogueById.setPrice(catalogueDTO.getPrice());
-        catalogueById.setImage(catalogueDTO.getImage());
+
+        if (!catalogueDTO.getImage().isEmpty()) {
+            catalogueById.setImage(catalogueDTO.getImage());
+        }
         catalogueById.setStock(catalogueDTO.getStock());
         catalogueById.setProductDesc(catalogueDTO.getProductDesc());
         catalogueById.setProductName(catalogueDTO.getProductName());
@@ -91,7 +95,26 @@ public class CatalogueServiceImpl implements CatalogueService{
 
     @Override
     public List<Catalogue> findByProductName(String productName) {
-        return catalogueDb.findByProductNameContaining(productName);
+        return catalogueDb.findByProductNameContainingIgnoreCase(productName);
+    }
+
+    @Override
+    public List<Catalogue> findByPriceRange(BigDecimal startPrice, BigDecimal endPrice) {
+        return catalogueDb.findByPriceBetween(startPrice, endPrice);
+    }
+
+    @Override
+    public List<Catalogue> findBySorted(String sortedBy, String order) {
+        // 4 Possibilities
+        if (sortedBy.equals("price") && order.equals("asc")) {
+            return catalogueDb.findByOrderByPriceAsc();
+        } else if (sortedBy.equals("price") && order.equals("desc")) {
+            return catalogueDb.findByOrderByPriceDesc();
+        } else if (sortedBy.equals("product") && order.equals("asc")) {
+            return catalogueDb.findByOrderByProductNameAsc();
+        } else {
+            return catalogueDb.findByOrderByProductNameDesc();
+        }
     }
 
     @Override

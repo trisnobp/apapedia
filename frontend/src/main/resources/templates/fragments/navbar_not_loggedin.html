@@ -8,7 +8,7 @@
     <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light pt-3">
         <div class="container-fluid">
             <div class="collapse navbar-collapse">
-                <a class="navbar-brand fw-bold text-dark ms-3 ml-3" href="">
+                <a class="navbar-brand fw-bold text-dark ms-3 ml-3" th:href="@{/}">
                     <img src="images/logo.png" width="60" height="60" alt="" class="ml-3"/>
                     <span class="ml-4">APAPEDIA</span>
                 </a>
@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item px-3">
-                        <a class="nav-link" th:href="@{/login}" style="color: #FF8C00;">Sign In</a>
+                        <a class="nav-link" th:href="@{/login-sso}" style="color: #FF8C00;">Sign In</a>
                     </li>
                     <li class="nav-item px-3">
                         <a type="button" class="btn btn-warning btn-rounded" style="background: #FF8C00; color: white;" th:href="@{/register}">Register</a>

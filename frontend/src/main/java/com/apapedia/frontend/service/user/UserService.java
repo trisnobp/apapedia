@@ -47,7 +47,6 @@ public class UserService {
                 .retrieve()
                 .bodyToMono(LoginResponseDTO.class);
 
-        System.out.println(response);
         return response.block();
     }
 
@@ -60,7 +59,6 @@ public class UserService {
                 .retrieve()
                 .bodyToMono(RegisterResponseDTO.class);
 
-        System.out.println(response);
         return response.block();
     }
 
@@ -73,8 +71,6 @@ public class UserService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-
-        System.out.println(userId);
 
         // Get the user data by the id
         var userData = this.webClient
