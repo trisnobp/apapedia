@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.order.DTO.OrderMapper;
-import com.apapedia.order.DTO.request.CartItemDTO;
 import com.apapedia.order.DTO.request.OrderDTO;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;

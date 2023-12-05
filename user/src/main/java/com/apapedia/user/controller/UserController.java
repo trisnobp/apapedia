@@ -51,6 +51,7 @@ public class UserController {
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteUser(
+            @RequestHeader("Authorization") String token,
             @PathVariable("id") UUID id
     ) {
         userService.deleteUser(id);
@@ -59,6 +60,7 @@ public class UserController {
 
     @PutMapping("/{id}/update")
     public ResponseEntity<UpdateUserDataResponse> updateUser(
+            @RequestHeader("Authorization") String token,
             @Valid @RequestBody UpdateUserDataRequest updateUserDataRequest,
             BindingResult bindingResult
     ) {
@@ -74,6 +76,7 @@ public class UserController {
 
     @PutMapping("/{id}/balance")
     public ResponseEntity<UpdateUserBalanceResponse> updateBalance(
+            @RequestHeader("Authorization") String token,
             @PathVariable("id") UUID id,
             @RequestParam(value = "add", required = false) Long addMoneyAmount,
             @RequestParam(value = "withdraw", required = false) Long withdrawMoneyAmount

@@ -63,12 +63,16 @@ public class PageController {
         dto.setUsernameOrEmail(username);
         dto.setPassword("SSOPassword");
 
-        var token = userRestService.login(dto).getToken();
-        System.out.println("Berhasil 3" + username);
+        try {
+            var token = userRestService.login(dto).getToken();
+            System.out.println("Berhasil 3" + username);
 
-        HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("token", token);
-        return new ModelAndView("redirect:/");
+            HttpSession httpSession = request.getSession(true);
+            httpSession.setAttribute("token", token);
+            return new ModelAndView("redirect:/");
+        } catch (NoSuchElementException e) {
+            return new ModelAndView("redirect:/logout-sso");
+        }
 
     }
 

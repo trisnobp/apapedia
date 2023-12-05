@@ -3,14 +3,13 @@ package com.apapedia.frontend.service.user;
 import com.apapedia.frontend.DTO.request.LoginRequestDTO;
 import com.apapedia.frontend.DTO.request.RegisterRequestDTO;
 import com.apapedia.frontend.DTO.request.TokenDTO;
-import com.apapedia.frontend.DTO.response.LoginResponseDTO;
-import com.apapedia.frontend.DTO.response.RegisterResponseDTO;
-import com.apapedia.frontend.DTO.response.UserDTO;
+import com.apapedia.frontend.DTO.response.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
@@ -82,6 +81,33 @@ public class UserService {
                 .block();
 
         return userData;
+    }
+
+    public UpdateUserDataResponse updateUserData(UserDTO userDTO, String token) {
+
+        var updatedUserData = this.webClient
+                .put()
+                .uri("/user/" + userDTO.getId() + "/update")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .bodyValue(userDTO)
+                .retrieve()
+                .bodyToMono(UpdateUserDataResponse.class)
+                .block();
+
+        return updatedUserData;
+    }
+
+    public UpdateUserBalanceResponse updateUserBalance(Long saldo, String token, UUID id) {
+
+        var updatedUserBalance = this.webClient
+                .put()
+                .uri("/user/{id}/balance?withdraw={withdraw}", id, saldo)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(UpdateUserBalanceResponse.class)
+                .block();
+
+        return updatedUserBalance;
     }
 
 }
