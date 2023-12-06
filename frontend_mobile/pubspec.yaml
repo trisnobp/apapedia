@@ -54,6 +54,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/fonts/
+    - assets/images/
 
   fonts:
     - family: Poppins
