@@ -4,27 +4,32 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<nav th:fragment="navbar" class="navbar navbar-expand-lg pt-3">
-    <a class="navbar-brand fw-bold text-dark ms-3 pr-2 ml-3" href="index.html">
-        <img src="images/logo.png" width="70" height="70" alt="" class="ml-3"/><span class="">
-              APAPEDIA
-            </span>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div class="container">
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light pt-3">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                <a class="navbar-brand fw-bold text-dark ms-3 ml-3" th:href="@{/}">
+                    <img src="images/logo.png" width="60" height="60" alt="" class="ml-3"/>
+                    <span class="ml-4">APAPEDIA</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
 
-    <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li>
-                <a class="nav-link" th:href="@{/login}" th:style="${active == 'Beranda'} ? 'color: black;' : ''">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/register}"  th:style="${active == 'Buku'} ? 'color: black;' : ''">Register</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item px-3">
+                        <a class="nav-link" th:href="@{/login-sso}" style="color: #FF8C00;">Sign In</a>
+                    </li>
+                    <li class="nav-item px-3">
+                        <a type="button" class="btn btn-warning btn-rounded" style="background: #FF8C00; color: white;" th:href="@{/register}">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
 </body>
 </html>

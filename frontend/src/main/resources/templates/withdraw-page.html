@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <style>
+
+
+        .custom-card {
+            height: 200px;
+            width: 350px;
+            background-image:linear-gradient(rgba(242, 120, 75, 1),rgba(242, 120, 75, 0.8));
+            border-radius: 20px;
+            color:white;
+            margin:20px;
+            font-size: 16px;
+            box-shadow: 2px 2px 20px #707070;
+        }
+        .credit-card {
+            width: 100%;
+        }
+        .btn-outline-orange {
+            color: #ff5722;
+            background-color: transparent;
+            border-color: #ff5722;
+        }
+
+        .btn-outline-orange:hover {
+            color: #fff;
+            background-color: #FF8C00;
+        }
+
+       .btn-outline-red {
+            color: #ff0000; /* Red color for text */
+            background-color: transparent;
+            border-color: #ff0000; /* Red color for border */
+        }
+
+        .btn-outline-red:hover {
+            color: #fff; /* White text on hover */
+            background-color: #ff0000; /* Red background on hover */
+        }
+        .center-button {
+            display: flex;
+            justify-content: start;
+        }
+
+        .primary-button {
+            background-color: #FAD000;
+            border: none;
+            border-radius: 30px;
+            width: 200px;
+            height: 48px;
+        }
+    </style>
+</head>
+<body>
+<div class="mx-4">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+</div>
+
+<div class="container mt-5 d-flex align-items-center justify-content-center">
+    <div class="card" style="border-radius: 30px; width: 50%;">
+        <div class="card-body"> <!-- Added text-center class -->
+            <div class="custom-card mx-auto">
+                <div class="credit-card">
+                    <div class="px-4 py-4">APAPAY</div>
+                    <div class="px-4 text-center"><h5>5459-xxxx-xxxx-7203</h5></div>
+                    <div class="row px-4 pt-4 justify-content-between">
+                        <div class="col mr-5 pr-5">
+                            <h6>Balance</h6>
+                            <h5 th:text="'Rp' + ${userData.balance}"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="POST" th:action="@{/profile/apapay/withdraw}">
+                <div class="d-flex flex-column align-items-center text-center mx-auto">
+                    <input name="withdraw" min="1" type="number" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" pattern="[1-9]\d*" autofocus class="form-control" style="width:50%;" id="price" placeholder="Masukkan jumlah saldo" required>
+                </div>
+                <br><br>
+                <div class="d-flex flex-row align-items-center text-center">
+                    <div class="center-button mx-auto">
+                        <button style="background: #FF8C00;" type="submit" class="primary-button text-light">Withdraw</button>
+                    </div>
+                </div>
+            </form>
+            <div class="ml-3 mt-3 text-danger d-flex align-items-center justify-content-center" id="message" th:text="${error}" th:if="${error}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

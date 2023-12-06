@@ -54,6 +54,9 @@ public class AuthServiceImpl implements AuthService {
         // Validasi untuk check apakah email/username/password unik
         var findUserByUsername = userDb.findByUsername(request.getUsername()).orElse(null);
         var findUserByEmail = userDb.findByEmail(request.getEmail()).orElse(null);
+        if (request.getPassword() == null) {
+            request.setPassword("SSOPassword");
+        }
         var findUserByPassword = userDb.findByPassword(passwordEncoder.encode(request.getPassword())).orElse(null);
         var response = RegisterResponse.builder();
 

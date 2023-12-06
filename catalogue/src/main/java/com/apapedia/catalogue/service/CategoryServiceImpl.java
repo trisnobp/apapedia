@@ -1,6 +1,9 @@
 package com.apapedia.catalogue.service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.apapedia.catalogue.DTO.response.CategoryDetailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +58,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryDb.findAll();
+    public List<CategoryDetailDTO> getAllCategories() {
+        List<CategoryDetailDTO> listCategoryDTO = new ArrayList<>();
+        var allCategories =  categoryDb.findAll();
+        for (var category: allCategories) {
+            CategoryDetailDTO categoryDTO = new CategoryDetailDTO();
+            categoryDTO.setCategoryName(category.getNamaCategory().toString());
+            categoryDTO.setId(category.getId());
+            listCategoryDTO.add(categoryDTO);
+        }
+
+        return listCategoryDTO;
     }
     
 }
