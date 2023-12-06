@@ -1,7 +1,7 @@
 package com.apapedia.order.dto;
 
 import com.apapedia.order.dto.request.CartItemDTO;
-import com.apapedia.order.dto.response.CreateUserCartResponse;
+import com.apapedia.order.dto.response.CreateUserCartResponseDTO;
 import com.apapedia.order.model.Cart;
 import org.mapstruct.Mapper;
 import com.apapedia.order.model.CartItem;
@@ -10,5 +10,5 @@ import com.apapedia.order.model.CartItem;
 public interface CartMapper {
 
     CartItem CartItemDTOToCartItem(CartItemDTO cartItemDTO);
-    CreateUserCartResponse CartToUserCartResponse(Cart cart);
+    CreateUserCartResponseDTO CartToUserCartResponse(Cart cart);
 }

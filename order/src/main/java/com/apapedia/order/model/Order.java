@@ -46,19 +46,16 @@ public class Order {
     private LocalDateTime updatedAt;
 
     @Column(name = "status")
-    private Integer status ;
+    private Integer status;
 
     @Column(name = "total_price")
-    private Integer totalPrice ;
-
+    private Long totalPrice;
 
     @Column(name = "customer")
-    private  UUID customer ;
-
+    private UUID customer;
 
     @Column(name = "seller")
     private UUID seller;
-
     
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonManagedReference

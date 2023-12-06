@@ -1,9 +1,14 @@
 package com.apapedia.order.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.apapedia.order.dto.request.CreateOrderRequestDTO;
+import com.apapedia.order.dto.request.OrderItemDTO;
+import com.apapedia.order.dto.response.CreateOrderResponseDTO;
+import com.apapedia.order.dto.response.ResponseCatalogueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -17,98 +22,107 @@ import com.apapedia.order.repository.OrderDb;
 import com.apapedia.order.repository.OrderItemDb;
 
 import jakarta.transaction.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @Transactional
 @ComponentScan(basePackages = "com.apapedia")
-public class OrderServiceimpl implements OrderService{
-
+public class OrderServiceimpl implements OrderService {
     @Autowired
     CartDb cartDb;
-
     @Autowired
     CartItemDb cartItemDb;
-
     @Autowired
     OrderDb orderDb;
-
     @Autowired
     OrderItemDb orderItemDb;
+    private final WebClient webClientCatalogue;
 
-    @Override
-    public Order createOrder(Order order) {
-        List<OrderItem> listOrderItem = new ArrayList<>();
-
-        if (order.getListOrderItem() != null) {
-            listOrderItem = order.getListOrderItem();
-            order.setListOrderItem(new ArrayList<>());
-        }
-
-        var orderTersimpan = orderDb.save(order);
-
-        for (OrderItem orderItem : listOrderItem){
-            createOrderItem(orderItem, orderTersimpan.getIdOrder());
-        }
-
-        
-
-
-        return orderTersimpan;
-
-
-
+    public OrderServiceimpl(WebClient.Builder webClientBuilder) {
+        this.webClientCatalogue = webClientBuilder.baseUrl("http://localhost:8081/api").build(); // Server Order
     }
 
     @Override
-    public void createOrderItem(OrderItem orderItem, UUID orderId) {
-       
-        // throw new UnsupportedOperationException("Unimplemented method 'createOrderItem'");
+    public CreateOrderResponseDTO createOrder(CreateOrderRequestDTO createOrderRequestDTO) {
+        List<OrderItemDTO> listOrderItem = new ArrayList<>();
 
-         
+        if (createOrderRequestDTO.getListOrderItem() != null) {
+            listOrderItem = createOrderRequestDTO.getListOrderItem();
+            createOrderRequestDTO.setListOrderItem(new ArrayList<>());
 
-                
-
-                OrderItemId orderItemId = new OrderItemId(orderId,orderItem.getProductId());
-
-                var order = orderDb.findByIdOrder(orderId);
-                
-                orderItem.setOrder(order);
-
-                orderItem.setOrderItemId(orderItemId);
-
-                orderItemDb.save(orderItem);
-
-                if (order.getListOrderItem() == null || order.getListOrderItem().size() == 0) {
-                    order.getListOrderItem().add(orderItem);
-                    order.setTotalPrice(orderItem.getProductPrice()*orderItem.getQuantity());
-                    orderDb.save(order);
+            // Untuk setiap barang yang dipesan, kita cek ke catalog service dulu berapa stok-nya
+            for (var item: listOrderItem) {
+                if (!isStockAvailable(item.getProductId(), item.getQuantity())) {
+                    return CreateOrderResponseDTO.builder()
+                            .status(false)
+                            .message("Jumlah produk " + item.getProductName() + " yang dipesan melebihi jumlah stok yang tersedia.").
+                            build();
                 }
-                else {
-                    // List<OrderItem> listOrderItem = new ArrayList<>();
+            }
 
-                    var totalPrice = order.getTotalPrice();
+            Order newOrder = new Order();
+            newOrder.setCreatedAt(LocalDateTime.now());
+            newOrder.setUpdatedAt(LocalDateTime.now());
+            newOrder.setStatus(0);
 
-                    var orderItemPrice = orderItem.getProductPrice() * orderItem.getQuantity();
+            // Calculate totalPrice
+            for (var item: listOrderItem) {
+                newOrder.setTotalPrice(newOrder.getTotalPrice() + item.getProductPrice());
+            }
 
-                    totalPrice += orderItemPrice;
+            newOrder.setCustomer(createOrderRequestDTO.getCustomer());
+            newOrder.setSeller(createOrderRequestDTO.getSeller());
 
-                    order.setTotalPrice(totalPrice);
+            var orderTersimpan = orderDb.save(newOrder);
 
+            for (OrderItemDTO orderItem : listOrderItem){
+                createOrderItem(orderItem, orderTersimpan.getIdOrder());
+            }
 
+            return CreateOrderResponseDTO.builder()
+                    .status(true)
+                    .message("Order dengan id " + orderTersimpan.getIdOrder() + " berhasil dibuat")
+                    .orderId(orderTersimpan.getIdOrder())
+                    .build();
+        } else {
+            return CreateOrderResponseDTO.builder()
+                            .status(false)
+                                    .message("Tidak ada barang yang dipesan").
+                    build();
+        }
+    }
 
-                    order.getListOrderItem().add(orderItem);
+    // Cek ketersediaan produk/katalog di database
+    public boolean isStockAvailable(UUID productId, int orderAmount) {
+        // Consume API untuk buat cart di Order Service, terus pass UUID cart ke sini
+        var catalogueDataResponse = this.webClientCatalogue
+                .get()
+                .uri("/catalogue/" + productId)
+                .retrieve()
+                .bodyToMono(ResponseCatalogueDTO.class).block();
 
-                    orderDb.save(order);
-                }
+        // Check the stock
+       return orderAmount >= catalogueDataResponse.getStock();
+    }
 
-                // return orderTersimpan;
-            
-        
+    @Override
+    public void createOrderItem(OrderItemDTO orderItem, UUID orderId) {
+        OrderItemId orderItemId = new OrderItemId(orderId, orderItem.getProductId());
+        var order = orderDb.findByIdOrder(orderId);
+
+        // Create order item
+        OrderItem newOrderItem = new OrderItem();
+        newOrderItem.setOrder(order);
+        newOrderItem.setQuantity(orderItem.getQuantity());
+        newOrderItem.setOrderItemId(orderItemId);
+        newOrderItem.setProductName(orderItem.getProductName());
+        newOrderItem.setProductPrice(orderItem.getProductPrice());
+
+        orderItemDb.save(newOrderItem);
     }
 
     @Override
     public List<Order> getOrderByIdCustomer(UUID customerId) {
-        
         return orderDb.findByCustomer(customerId);
     }
     

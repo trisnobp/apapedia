@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserCartResponse {
+public class CreateUserCartResponseDTO {
 
     private UUID idCart;
     private UUID cartId;

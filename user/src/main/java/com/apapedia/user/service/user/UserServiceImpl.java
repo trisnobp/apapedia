@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
         user.setBalance(user.getBalance() - amount);
         userDb.save(user);
         return UpdateUserBalanceResponse.builder().status(true)
-                .message("Saldo berhasil ditambahkan!")
+                .message("Saldo berhasil diambil!")
                 .balance(user.getBalance()).build();
     }
 }

@@ -8,6 +8,11 @@ import com.apapedia.frontend.setting.Setting;
 import io.netty.channel.ChannelOption;
 import lombok.extern.java.Log;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +64,10 @@ public class PageController {
         Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
         String username = serviceResponse.getAuthenticationSuccess().getUser();
 
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, "webadmin", null);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+
         var dto = new LoginRequestDTO();
         dto.setUsernameOrEmail(username);
         dto.setPassword("SSOPassword");
@@ -68,6 +77,7 @@ public class PageController {
             System.out.println("Berhasil 3" + username);
 
             HttpSession httpSession = request.getSession(true);
+            httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
             httpSession.setAttribute("token", token);
             return new ModelAndView("redirect:/");
         } catch (NoSuchElementException e) {

@@ -31,10 +31,9 @@ public class UserService {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(tokenDTO)
                 .retrieve()
-                .bodyToMono(Boolean.class);
+                .bodyToMono(boolean.class);
 
-        System.out.println(response);
-        return response.block().booleanValue();
+        return response.block();
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
@@ -83,6 +82,18 @@ public class UserService {
         return userData;
     }
 
+    public UserDTO getUserById(String token, UUID id) {
+        // Get the user data by the id
+        var userData = this.webClient
+                .get()
+                .uri("/user/" + id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(UserDTO.class)
+                .block();
+
+        return userData;
+    }
     public UpdateUserDataResponse updateUserData(UserDTO userDTO, String token) {
 
         var updatedUserData = this.webClient
