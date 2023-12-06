@@ -1,7 +1,9 @@
 package com.apapedia.user.controller;
 
+import com.apapedia.user.config.JwtService;
 import com.apapedia.user.dto.request.LoginRequest;
 import com.apapedia.user.dto.request.RegisterRequest;
+import com.apapedia.user.dto.request.TokenRequest;
 import com.apapedia.user.dto.response.LoginResponse;
 import com.apapedia.user.dto.response.RegisterResponse;
 import com.apapedia.user.service.auth.AuthService;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Autowired
     AuthService authService;
+
+    @Autowired
+    JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(
@@ -35,5 +40,12 @@ public class AuthController {
             @RequestBody LoginRequest request
     ) {
         return ResponseEntity.ok(authService.loginForSeller(request));
+    }
+
+    @PostMapping("/check-token-validity")
+    public ResponseEntity<Boolean> checkTokenValidity(
+            @RequestBody TokenRequest request
+    ) {
+        return ResponseEntity.ok(jwtService.isTokenValid(request.getToken()));
     }
 }

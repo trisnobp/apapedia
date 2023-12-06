@@ -23,6 +23,7 @@ public class UserDataResponse {
     private String address;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String role;
     // Can be null
     private String category;
     private UUID cartId;

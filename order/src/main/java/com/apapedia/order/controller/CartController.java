@@ -1,11 +1,10 @@
 package com.apapedia.order.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.apapedia.order.dto.CartMapper;
-import com.apapedia.order.dto.response.CreateUserCartResponse;
+import com.apapedia.order.dto.response.CreateUserCartResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,7 @@ public class CartController {
     CartMapper cartMapper;
 
     @PostMapping("/create/{userId}")
-    public ResponseEntity<CreateUserCartResponse> createCart(@PathVariable("userId") UUID userId){
+    public ResponseEntity<CreateUserCartResponseDTO> createCart(@PathVariable("userId") UUID userId){
         
         Cart cartBaru = new Cart();
         cartBaru.setUserId(userId);
