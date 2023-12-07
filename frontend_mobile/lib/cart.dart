@@ -1,4 +1,7 @@
-import 'user.dart';class Cart {
+import 'user.dart';
+import 'cart_item.dart';
+
+class Cart {
   final int id;
   final User user;
   final List<CartItem> cartItems;
@@ -10,5 +13,4 @@ import 'user.dart';class Cart {
   });
 }
 
-import 'cart_item.dart';
 
