@@ -9,6 +9,7 @@ class Order {
   final DateTime createdAt;
   final DateTime updatedAt;
   final List<OrderItem> orderItems;
+  double total;
 
   Order({
     required this.id,
@@ -18,12 +19,17 @@ class Order {
     required this.createdAt,
     required this.updatedAt,
     required this.orderItems,
+    this.total = 0.0,
   });
+
+  double calculateAndUpdateTotal() {
+    total = orderItems.fold(0.0, (sum, item) => sum + item.price * item.quantity);
+    return total;
+  }
+
 }
 
 enum OrderStatus {
-  Pending,
-  Shipped,
-  Delivered,
-  Cancelled,
+  BarangDiterima,
+  Selesai,
 }

@@ -48,12 +48,11 @@ class _CartPageState extends State<CartPage> {
       );
     }).toList();
 
-
     Order order = Order(
       id: DateTime.now().millisecondsSinceEpoch,
       customer: widget.customer,
       seller: Seller(),
-      status: OrderStatus.Pending,
+      status: setStatusPertama,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       orderItems: orderItems,
