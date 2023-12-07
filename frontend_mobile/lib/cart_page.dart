@@ -10,6 +10,7 @@ import 'package:frontend_mobile/login_page.dart';
 import 'package:frontend_mobile/register_page.dart';
 import 'package:frontend_mobile/catalog_page.dart';
 import 'package:frontend_mobile/order_history_page.dart';
+import 'confirm_order_page.dart';
 
 class CartPage extends StatefulWidget {
   final Customer customer;
@@ -26,7 +27,7 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    //ambil cart dia skrg
+    //ambil cart dia skrg dr cart_functions
     cart = getCartDetails(widget.customer);
   }
 
@@ -38,8 +39,29 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _navigateToConfirmOrder() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmOrderPage(customer: widget.customer)));
+    List<OrderItem> orderItems = cart.cartItems.map((cartItem) {
+      return OrderItem(
+        id: cartItem.product.id,
+        name: cartItem.product.name,
+        quantity: cartItem.quantity,
+        price: cartItem.product.price,
+      );
+    }).toList();
+
+
+    Order order = Order(
+      id: DateTime.now().millisecondsSinceEpoch,
+      customer: widget.customer,
+      seller: Seller(),
+      status: OrderStatus.Pending,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      orderItems: orderItems,
+    );
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmOrderPage(customer: widget.customer, order: order)));
   }
+
 
   @override
   Widget build(BuildContext context) {
