@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile/user.dart';
+import 'edit_profile_page.dart';
+import 'top_up_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final Customer customer;
@@ -149,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     _buildDetailRow('Address', widget.customer.address),
                     ElevatedButton(
                       onPressed: _editProfile,
-                      child: Text('Edit User Data'),
+                      child: Text('Edit profile'),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.orange, // background (button) color
                         onPrimary: Colors.white, // foreground (text) color
