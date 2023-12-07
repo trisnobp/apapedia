@@ -4,6 +4,7 @@ class User {
   final String username;
   final String password;
   final String email;
+  double balance;
   final String address;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -17,6 +18,7 @@ class User {
     required this.address,
     required this.createdAt,
     required this.updatedAt,
+    this.balance = 0.0,
   });
 }
 
@@ -38,6 +40,7 @@ class Seller extends User {
     required DateTime createdAt,
     required DateTime updatedAt,
     required this.category,
+
   }) : super(
     id: id,
     name: name,
