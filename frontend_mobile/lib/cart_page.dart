@@ -61,7 +61,6 @@ class _CartPageState extends State<CartPage> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmOrderPage(customer: widget.customer, order: order)));
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
