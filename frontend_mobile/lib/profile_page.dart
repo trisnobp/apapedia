@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile/user.dart';
 import 'edit_profile_page.dart';
-import 'top_up_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final Customer customer;
@@ -22,9 +21,39 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _withdrawBalance() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TopUpPage(customer: widget.customer))
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController _amountController = TextEditingController();
+        return Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Withdraw Amount',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // BE SINI BELOM
+                  Navigator.of(context).pop(); // Close the bottom sheet
+                },
+                child: Text('Withdraw'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.orange,
+                  onPrimary: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
