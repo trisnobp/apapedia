@@ -28,16 +28,12 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
   @override
   void initState() {
     super.initState();
-    total = calculateTotal(widget.order.orderItems);
-  }
-
-  double calculateTotal(List<OrderItem> orderItems) {
-    return orderItems.fold(0, (sum, item) => sum + item.price * item.quantity);
+    total = widget.order.calculateAndUpdateTotal();
   }
 
   void _confirmOrderAndNavigate() {
     // tambahin order ke db etc
-    Navigator.pushReplacement(context, // Use pushReplacement to prevent going back to confirm page
+    Navigator.pushReplacement(context,
       MaterialPageRoute(builder: (context) => OrderHistoryPage(customer: widget.customer)),
     );
   }
