@@ -1,4 +1,12 @@
+
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile/cart.dart';
+import 'package:frontend_mobile/cart_item.dart';
+import 'package:frontend_mobile/order.dart';
+import 'package:frontend_mobile/order_item.dart';
+import 'package:frontend_mobile/product.dart';
+import 'package:frontend_mobile/user.dart';
+import 'cart_functions.dart';
 
 //global variables
 bool isLoggedIn = false;
@@ -19,36 +27,22 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      initialRoute: '/catalog', // Set the initial route to the login page
+      initialRoute: '/catalog',
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/homePage': (context) => MyHomePage(),
-        '/catalog' : (context) => CatalogPage(
-          products: [], // produk yang ditunjukkin disini
-          isLoggedIn: isLoggedIn, // Pass the value of your global isLoggedIn variable
-          onAddToCart: (product) {
-                // Implement your addToCart logic here
-          },
-          onBuyNow: (product) {
-                List<Product> purchasedProducts = [product];
-
-                // Navigate to the OrderHistoryPage and pass the purchased products
-                Navigator.pushNamed(
-                  context,
-                  '/orderHistory',
-                  arguments: purchasedProducts,
-                );
-          },
-          ),
-        '/productDetail' : (context) => ProductDetailPage(
-          product : product //produk to show
+        '/productDetail': (context) => ProductDetailPage(
+          product: product
         ),
-        '/orderHistory' : (context) => OrderHistoryPage(),
-        '/cart' : (context) => CartPage(),
-            },
-
-          );
+        '/catalog': (context) => CatalogPage(
+          products: []
+        ),
+        '/orderHistory': (context) => OrderHistoryPage(),
+        '/cart': (context) => CartPage(),
+        '/confirmOrder': (context) => ConfirmOrderPage(),
+      },
+    );
   }
 }
 
@@ -67,11 +61,13 @@ class _LoginPageState extends State<LoginPage> {
     String password = _passwordController.text;
 
     // Perform login logic here
+
+    // customer = set customer yang lagi pake
       isLoggedIn = true;
     //
 
-    // Assuming login is successful, navigate to the home page
-    Navigator.pushReplacementNamed(context, '/homePage');
+    // Assuming login is successful, navigate to the catalog page
+    Navigator.pushReplacementNamed(context, '/catalog');
   }
 
   @override
@@ -189,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // Perform registration logic here
     isRegistered = true;
 
-    // Assuming registration is successful, navigate to the home page
+    // Assuming registration is successful, navigate to login
     Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -291,57 +287,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-// class Catalogue
-
-// product category
-
-enum ProductCategory {
-  NoCategory,
-  AksesorisFashion,
-  BukuAlatTulis,
-  Elektronik,
-  FashionBayiAnak,
-  FashionMuslim,
-  Fotografi,
-  HobiKoleksi,
-  JamTangan,
-  PerawatanKecantikan,
-  MakananMinuman,
-  Otomotif,
-  PerlengkapanRumah,
-  SouvenirPartySupplies,
-}
-
-class Product {
-  final String id;
-  final String name;
-  final String description;
-  final double price;
-  final String image; // Add image attribute
-  final ProductCategory category; // Add category attribute
-
-  Product({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.image,
-    required this.category,
-  });
-}
-
 class CatalogPage extends StatelessWidget {
   final List<Product> products;
-  final bool isLoggedIn;
-  final Function(Product) onAddToCart;
-  final Function(Product) onBuyNow;
 
-  CatalogPage({
-    required this.products,
-    required this.isLoggedIn,
-    required this.onAddToCart,
-    required this.onBuyNow,
-  });
+  CatalogPage({required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -357,7 +306,7 @@ class CatalogPage extends StatelessWidget {
             child: ListTile(
               title: Text(product.name),
               subtitle: Text('\$${product.price}'),
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -365,12 +314,12 @@ class CatalogPage extends StatelessWidget {
                   ),
                 );
               },
-              trailing: isLoggedIn ? _buildButtons(product) : null,
+              trailing: _buildButtons(product),
               leading: Image.asset(
-                product.image, // Load the image from the asset path
-                width: 80, // Set the desired width
-                height: 80, // Set the desired height
-                fit: BoxFit.cover, // Adjust the fit as needed
+                product.image,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
               ),
             ),
           );
@@ -378,19 +327,26 @@ class CatalogPage extends StatelessWidget {
       ),
     );
   }
-}
 
   Widget _buildButtons(Product product) {
+    if (!isLoggedIn) {
+      return Container();
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
           icon: Icon(Icons.add_shopping_cart),
-          onPressed: () => onAddToCart(product),
+          onPressed: () {
+            addToCart(product);
+          },
         ),
         IconButton(
           icon: Icon(Icons.payment),
-          onPressed: () => onBuyNow(product),
+          onPressed: () {
+            buyNow(product);
+          },
         ),
       ],
     );
@@ -424,21 +380,17 @@ class ProductDetailPage extends StatelessWidget {
             Text('Name: ${product.name}'),
             Text('Description: ${product.description}'),
             Text('Price: \$${product.price.toStringAsFixed(2)}'),
+            // Add a Text widget for displaying the category
             Text('Category: ${product.category.toString().split('.').last}'),
-
             SizedBox(height: 20),
-
             ElevatedButton(
               onPressed: () {
-                // Implement your addToCart logic here
                 addToCart(product);
               },
               child: Text('Add To Cart'),
             ),
-
             ElevatedButton(
               onPressed: () {
-                // Implement your buyNow logic here
                 buyNow(product);
               },
               child: Text('Buy Now'),
@@ -448,28 +400,111 @@ class ProductDetailPage extends StatelessWidget {
       ),
     );
   }
-
-
-  void addToCart(Product product) {
-    // Implement addToCart logic here
-    // You can add the product to the cart or perform any other necessary actions.
-  }
-
-  void buyNow(Product product) {
-    // Implement logic here
-    // You can handle the purchase process, navigate to order history, etc.
-  }
 }
 
-// class OrderHistoryPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     // Receive the purchased products from the route arguments
-//     final List<Product> purchasedProducts = ModalRoute
-//         .of(context)!
-//         .settings
-//         .arguments as List<Product>;
-//   }
+
+class ConfirmOrderPage extends StatelessWidget {
+  final List<Product> selectedProducts; // List produk yang ingin dipesan
+  final double totalCost; // Total biaya pesanan
+  final double userBalance; // Saldo pengguna
+
+  ConfirmOrderPage({
+    required this.selectedProducts,
+    required this.totalCost,
+    required this.userBalance,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Confirm Order'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Ringkasan Pesanan:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+            // Menampilkan ringkasan pesanan
+            _buildOrderSummary(),
+            SizedBox(height: 16),
+            Text(
+              'Total Biaya: \$${totalCost.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(height: 16),
+            // Tombol "Confirm Order"
+            ElevatedButton(
+              onPressed: () {
+                // Implementasikan logika untuk mengkonfirmasi pesanan
+                if (totalCost <= userBalance) {
+                  _confirmOrder(context);
+                } else {
+                  // Saldo tidak mencukupi
+                  _showInsufficientBalanceDialog(context);
+                }
+              },
+              child: Text('Confirm Order'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Fungsi untuk menampilkan ringkasan pesanan
+  Widget _buildOrderSummary() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: selectedProducts.map((product) {
+        return Text(
+          '${product.name} - \$${product.price.toStringAsFixed(2)}',
+          style: TextStyle(fontSize: 16),
+        );
+      }).toList(),
+    );
+  }
+
+  // Fungsi untuk bayar
+  void _confirmOrder(BuildContext context) {
+    // Belom BE
+
+    Navigator.of(context).pushReplacementNamed('/orderHistory');
+  }
+
+
+  void _showInsufficientBalanceDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Saldo Tidak Mencukupi'),
+          content: Text('Saldo Anda tidak mencukupi untuk melakukan pesanan ini.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
 
 class MyHomePage extends StatefulWidget {
   @override
