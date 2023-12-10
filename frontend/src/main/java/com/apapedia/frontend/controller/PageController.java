@@ -74,7 +74,9 @@ public class PageController {
 
         try {
             var token = userRestService.login(dto).getToken();
-            System.out.println("Berhasil 3" + username);
+            if (token == null) { // If account couldn't be found
+                return new ModelAndView("redirect:/logout-sso");
+            }
 
             HttpSession httpSession = request.getSession(true);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
