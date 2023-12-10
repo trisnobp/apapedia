@@ -34,9 +34,7 @@ public class OrderItem {
     private String productName;
 
     @Column(name = "product_price")
-    private Long productPrice;
-    
-
+    private long productPrice;
 
 }
 

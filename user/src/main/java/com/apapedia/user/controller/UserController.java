@@ -55,7 +55,7 @@ public class UserController {
             @PathVariable("id") UUID id
     ) {
         userService.deleteUser(id);
-        return ResponseEntity.ok("User berhasil di-delete.");
+        return ResponseEntity.ok("User is successfully deleted.");
     }
 
     @PutMapping("/{id}/update")

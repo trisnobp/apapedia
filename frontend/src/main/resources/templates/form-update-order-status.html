@@ -2,11 +2,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Order History</title>
+    <title>Update Order Status</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
@@ -48,6 +46,18 @@
             color: #fff; /* White text on hover */
             background-color: #ff0000; /* Red background on hover */
         }
+        .center-button {
+            display: flex;
+            justify-content: start;
+        }
+
+        .primary-button {
+            background-color: #FAD000;
+            border: none;
+            border-radius: 30px;
+            width: 200px;
+            height: 48px;
+        }
     </style>
 </head>
 <body>
@@ -56,46 +66,31 @@
 </div>
 
 <div class="text-center pt-3">
-    <h2>Order History</h2>
+    <h2>Order Status</h2>
 </div>
-<br><br>
 
-<div class="container d-flex mt-2 align-items-center justify-content-center">
-    <div class="card" style="border-radius: 30px; width: 70%;">
+<div class="container mt-5 d-flex align-items-center justify-content-center">
+    <div class="card" style="border-radius: 30px; width: 50%;">
         <div class="card-body"> <!-- Added text-center class -->
-
-            <table id="myTable" class="display" style="width:100%">
-                <thead>
-                <tr>
-                    <th>Order Id</th>
-                    <th>Customer</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="order, iterationStatus: ${listOrder}">
-                    <td th:text="${order.nama}"></td>
-                    <td th:text="${order.namaCustomer}"></td>
-                    <td th:text="${order.status}"></td>
-                    <td>
-                        <a style="background: #FF8C00;" type="button" class="btn btn-md btn-secondary" th:href="@{/order/{idOrder}(idOrder=${order.id})}">Order Detail</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <form method="POST" th:object="${orderDTO}" th:action="@{/order/__${orderDTO.idOrder}__/update}">
+                <label for="status" class="form-label mx-auto">Choose Order Status</label>
+                <input class="form-control" type="hidden" th:field="*{idOrder}"/>
+                <select class="form-select" id="status" th:field="*{status}">
+                    <option th:value="0">Menunggu Konfirmasi</option>
+                    <option th:value="1">Dikonfirmasi Penjual</option>
+                    <option th:value="2">Menunggu Kurir</option>
+                    <option th:value="3">Dalam Perjalanan</option>
+                </select>
+                <br><br>
+                <div class="d-flex flex-row align-items-center text-center">
+                    <div class="center-button mx-auto">
+                        <button style="background: #FF8C00;" type="submit" class="primary-button text-light">Update</button>
+                    </div>
+                </div>
+            </form>
+            <div class="ml-3 mt-3 text-danger d-flex align-items-center justify-content-center" id="message" th:text="${error}" th:if="${error}"></div>
         </div>
     </div>
 </div>
-
 </body>
-<script>
-    $(document).ready(function(){ $('#myTable').DataTable({
-    "lengthMenu": [5, 10, 20],
-    "columnDefs": [
-        ],
-    });
-    });
-
-</script>
 </html>

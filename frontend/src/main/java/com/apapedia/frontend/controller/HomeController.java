@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.apapedia.frontend.DTO.request.LoginRequestDTO;
 import com.apapedia.frontend.DTO.request.RegisterRequestDTO;
 import com.apapedia.frontend.DTO.response.UserDTO;
+import com.apapedia.frontend.service.order.OrderService;
 import com.apapedia.frontend.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,9 +28,10 @@ public class HomeController {
 
     @Autowired
     UserService userService;
-
     @Autowired
     CatalogueServiceClient catalogueServiceClient;
+    @Autowired
+    OrderService orderService;
 
     @GetMapping("/")
     public String homePage(HttpServletRequest request, Model model) {
@@ -49,10 +51,14 @@ public class HomeController {
             // Get seller data via token that we store in session
             String token = (String) session.getAttribute("token");
             UserDTO sellerData = userService.getUserData(token);
+
+            System.out.println(token);
             // Get the list of catalogues that the seller has
             try {
                 var responseEntityData = catalogueServiceClient.retrieveSellerCatalogue(token, sellerData.getId());
                 List<CatalogueDetailDTO> listOfCatalogues = responseEntityData.getBody();
+
+                var topProducts = orderService.getTopFiveProducts(sellerData.getId());
 
                 if (listOfCatalogues.isEmpty()) {
                     model.addAttribute("isEmpty", true);
@@ -60,9 +66,11 @@ public class HomeController {
                     model.addAttribute("isEmpty", false);
                     model.addAttribute("sellerCatalogue", listOfCatalogues);
                 }
+                model.addAttribute("topProducts", topProducts);
                 model.addAttribute("name", sellerData.getName());
                 model.addAttribute("isLoggedIn", true);
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 model.addAttribute("error", e.getMessage());
             }
         }
