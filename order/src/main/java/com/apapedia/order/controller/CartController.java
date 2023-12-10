@@ -16,7 +16,6 @@ import com.apapedia.order.dto.request.CartItemDTO;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 
-@Controller
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {

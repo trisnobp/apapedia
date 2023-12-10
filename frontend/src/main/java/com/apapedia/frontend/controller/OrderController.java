@@ -1,6 +1,5 @@
 package com.apapedia.frontend.controller;
 
-import com.apapedia.frontend.DTO.request.RegisterRequestDTO;
 import com.apapedia.frontend.DTO.request.UpdateOrderStatusRequestDTO;
 import com.apapedia.frontend.DTO.response.OrderDTO;
 import com.apapedia.frontend.DTO.response.UpdateOrderStatusResponseDTO;

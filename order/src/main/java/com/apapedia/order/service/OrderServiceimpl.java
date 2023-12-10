@@ -10,7 +10,6 @@ import com.apapedia.order.dto.request.UpdateOrderRequestDTO;
 import com.apapedia.order.dto.response.CreateOrderResponseDTO;
 import com.apapedia.order.dto.response.ResponseCatalogueDTO;
 import com.apapedia.order.dto.response.UpdateOrderResponseDTO;
-import com.apapedia.order.dto.response.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
@@ -101,8 +100,8 @@ public class OrderServiceimpl implements OrderService {
                     .build();
         } else {
             return CreateOrderResponseDTO.builder()
-                            .status(false)
-                                    .message("Tidak ada barang yang dipesan").
+                    .status(false)
+                    .message("Tidak ada barang yang dipesan").
                     build();
         }
     }
@@ -117,7 +116,7 @@ public class OrderServiceimpl implements OrderService {
                 .bodyToMono(ResponseCatalogueDTO.class).block();
 
         // Check the stock
-       return orderAmount <= catalogueDataResponse.getStock();
+        return orderAmount <= catalogueDataResponse.getStock();
     }
 
     @Override

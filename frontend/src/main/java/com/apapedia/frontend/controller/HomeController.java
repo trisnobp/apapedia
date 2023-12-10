@@ -1,9 +1,6 @@
 package com.apapedia.frontend.controller;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
 import com.apapedia.frontend.DTO.request.LoginRequestDTO;
 import com.apapedia.frontend.DTO.request.RegisterRequestDTO;
 import com.apapedia.frontend.DTO.response.UserDTO;
@@ -12,11 +9,9 @@ import com.apapedia.frontend.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.frontend.DTO.request.CatalogueDetailDTO;
 

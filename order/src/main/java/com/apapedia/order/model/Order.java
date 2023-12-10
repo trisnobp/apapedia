@@ -40,7 +40,7 @@ public class Order {
     @GeneratedValue(generator = "order_sequence")
     @GenericGenerator(name = "order_sequence", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id_order", nullable = false)
-    private UUID idOrder ;
+    private UUID idOrder;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;

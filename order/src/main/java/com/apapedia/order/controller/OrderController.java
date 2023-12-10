@@ -13,14 +13,12 @@ import com.apapedia.order.dto.response.UpdateOrderResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import com.apapedia.order.model.Order;
 import com.apapedia.order.service.CartServiceimpl;
 import com.apapedia.order.service.OrderServiceimpl;
 
-@Controller
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
