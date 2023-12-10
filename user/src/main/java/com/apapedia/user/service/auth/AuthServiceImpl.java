@@ -105,27 +105,34 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse loginForSeller(LoginRequest request) {
-        var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
-                : userDb.findByUsername(request.getUsernameOrEmail()).get();
+        try {
+            var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
+                    : userDb.findByUsername(request.getUsernameOrEmail()).get();
 
-        if (user.getRole().getRoleName().equals("CUSTOMER")) {
-            return LoginResponse.builder().status(false)
-                    .message("Account isn't registered as Seller.").build();
+            if (user.getRole().getRoleName().equals("CUSTOMER")) {
+                return LoginResponse.builder().status(false)
+                        .message("Account isn't registered as Seller.").build();
+            }
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsernameOrEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            var jwtToken = jwtService.createToken(user);
+            return LoginResponse.builder()
+                    .status(true)
+                    .message("You are successfully logged in!")
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception e) {
+            return LoginResponse.builder()
+                    .status(false)
+                    .message("No such element")
+                    .build();
         }
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsernameOrEmail(),
-                        request.getPassword()
-                )
-        );
-
-        var jwtToken = jwtService.createToken(user);
-        return LoginResponse.builder()
-                .status(true)
-                .message("You are successfully logged in!")
-                .token(jwtToken)
-                .build();
     }
 
     @Override

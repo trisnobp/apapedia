@@ -53,8 +53,6 @@ public class CatalogueController {
             @RequestParam(name = "endPrice", required = false) BigDecimal endPrice,
             Model model
     ) {
-        System.out.println(startPrice);
-        System.out.println(endPrice);
         List<CatalogueDetailDTO> listOfCatalogue = catalogueServiceClient.getCatalogsByPriceRange(startPrice, endPrice).getBody();
         if (listOfCatalogue.isEmpty()) {
             model.addAttribute("searchMode", true);
@@ -99,6 +97,9 @@ public class CatalogueController {
         }
 
         String token = (String) session.getAttribute("token");
+        if (!userService.checkTokenValidity(token)) {
+            return "redirect:/logout-sso";
+        }
 
         CreateCatalogueRequestDTO catalogueDTO = new CreateCatalogueRequestDTO();
         catalogueDTO.setSellerId(userService.getUserData(token).getId());
@@ -113,6 +114,9 @@ public class CatalogueController {
         try {
             HttpSession session = request.getSession();
             String token = (String) session.getAttribute("token");
+            if (!userService.checkTokenValidity(token)) {
+                return "redirect:/logout-sso";
+            }
 
             // Ubah format image ke byte, supaya bisa ditampilin
             String fileName = StringUtils.cleanPath(catalogueDTO.getFile().getOriginalFilename());
@@ -143,6 +147,9 @@ public class CatalogueController {
         }
 
         String token = (String) session.getAttribute("token");
+        if (!userService.checkTokenValidity(token)) {
+            return "redirect:/logout-sso";
+        }
 
         CatalogueDetailDTO catalogueDTO = catalogueServiceClient.retrieveCatalogue(token, id).getBody();
         model.addAttribute("listCategory", catalogueServiceClient.getAllCategories(token).getBody());
@@ -155,6 +162,9 @@ public class CatalogueController {
         try {
             HttpSession session = request.getSession();
             String token = (String) session.getAttribute("token");
+            if (!userService.checkTokenValidity(token)) {
+                return "redirect:/logout-sso";
+            }
 
             // Ubah format image ke byte, supaya bisa ditampilin
             if (!(catalogueDTO.getFile().getOriginalFilename() == null)) {
@@ -178,26 +188,4 @@ public class CatalogueController {
             return "redirect:/login-sso";
         }
     }
-
-//    @GetMapping("/catalogue/{idProduk}")
-//    public String retrieveCatalogue(HttpServletRequest request, @PathVariable("idProduk") UUID idProduk, Model model){
-//        HttpSession session = request.getSession(false);
-//        if (session == null || (String) session.getAttribute("token") == null) {
-//            return "redirect:/login";
-//        }
-//
-//        String token = (String) session.getAttribute("token");
-//        ResponseEntity<CatalogueDetailDTO> responseEntity = catalogueServiceClient.retrieveCatalogue(token, idProduk);
-//        try {
-//            CatalogueDetailDTO getProdukDetailDTO = responseEntity.getBody();
-//
-//            //    return getProdukDetailDTO;
-//            model.addAttribute("catalogDetail", getProdukDetailDTO);
-//            return "catalog-detail";
-//        } catch (NoSuchElementException e){
-//            throw new ResponseStatusException(
-//                    responseEntity.getStatusCode(), "Produk not found");
-//        }
-//
-//    }
 }

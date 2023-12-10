@@ -1,7 +1,6 @@
 package com.apapedia.frontend.service.catalogue;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,7 +10,6 @@ import com.apapedia.frontend.DTO.response.CreateCatalogueResponseDTO;
 import com.apapedia.frontend.DTO.response.UpdateCatalogueResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.apapedia.frontend.DTO.request.CatalogueDetailDTO;
@@ -52,6 +50,9 @@ public interface CatalogueServiceClient {
             @PathVariable("id") UUID id,
             @RequestBody CatalogueDetailDTO catalogueDTO
     );
+
+    @GetMapping("/{id}/delete")
+    public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id);
 
     @GetMapping("/search")
     public ResponseEntity<List<CatalogueDetailDTO>> getCatalogsByName(

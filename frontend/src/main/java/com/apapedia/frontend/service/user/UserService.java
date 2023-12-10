@@ -121,4 +121,15 @@ public class UserService {
         return updatedUserBalance;
     }
 
+    public String deleteSellerAccount(UUID id, String token) {
+        var deleteSeller = this.webClient
+                .delete()
+                .uri("/user/{id}/delete", id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        return deleteSeller;
+    }
 }

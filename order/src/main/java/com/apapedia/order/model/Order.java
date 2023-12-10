@@ -22,8 +22,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter; 
-
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 @Getter
@@ -32,12 +33,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name="_order")
+@SQLDelete(sql = "UPDATE _order SET is_deleted = true WHERE id_order=?")
+@Where(clause = "is_deleted=false")
 public class Order {
     @Id
     @GeneratedValue(generator = "order_sequence")
     @GenericGenerator(name = "order_sequence", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id_order", nullable = false)
-    private UUID idOrder ;
+    private UUID idOrder;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -49,13 +52,16 @@ public class Order {
     private Integer status;
 
     @Column(name = "total_price")
-    private Long totalPrice;
+    private long totalPrice;
 
     @Column(name = "customer")
     private UUID customer;
 
     @Column(name = "seller")
     private UUID seller;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
     
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonManagedReference
