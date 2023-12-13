@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile/user.dart';
+import 'package:frontend_mobile/dto/user.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final Customer customer;
+  //final Customer customer;
 
-  EditProfilePage({Key? key, required this.customer}) : super(key: key);
+  EditProfilePage({Key? key}) : super(key: key);
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -17,14 +17,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _emailController;
   late TextEditingController _addressController;
 
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.customer.name);
-    _usernameController = TextEditingController(text: widget.customer.username);
-    _emailController = TextEditingController(text: widget.customer.email);
-    _addressController = TextEditingController(text: widget.customer.address);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _nameController = TextEditingController(text: widget.customer.name);
+  //   _usernameController = TextEditingController(text: widget.customer.username);
+  //   _emailController = TextEditingController(text: widget.customer.email);
+  //   _addressController = TextEditingController(text: widget.customer.address);
+  // }
 
   @override
   void dispose() {

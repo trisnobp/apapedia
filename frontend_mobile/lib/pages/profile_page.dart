@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile/user.dart';
+import 'package:frontend_mobile/dto/user.dart';
 import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  final Customer customer;
 
-  ProfilePage({Key? key, required this.customer}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -16,7 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _editProfile() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProfilePage(customer: widget.customer))
+      MaterialPageRoute(builder: (context) => EditProfilePage())
     );
   }
 
@@ -159,9 +158,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       backgroundImage: NetworkImage("https://via.placeholder.com/150"),
                     ),
                     SizedBox(height: 10),
-                    Text(widget.customer.name, style: TextStyle(fontSize: 24)),
-                    Text('Customer', style: TextStyle(color: Colors.grey)),
-                    _balanceCard(widget.customer),
+                    //Text(widget.customer.name, style: TextStyle(fontSize: 24)),
+                    //Text('Customer', style: TextStyle(color: Colors.grey)),
+                    //_balanceCard(widget.customer),
                   ],
                 ),
               ),
@@ -174,10 +173,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: <Widget>[
-                    _buildDetailRow('Username', widget.customer.username),
-                    _buildDetailRow('Full Name', widget.customer.name),
-                    _buildDetailRow('Email', widget.customer.email),
-                    _buildDetailRow('Address', widget.customer.address),
+                    //_buildDetailRow('Username', widget.customer.username),
+                    //_buildDetailRow('Full Name', widget.customer.name),
+                    //_buildDetailRow('Email', widget.customer.email),
+                    //_buildDetailRow('Address', widget.customer.address),
                     ElevatedButton(
                       onPressed: _editProfile,
                       child: Text('Edit profile'),

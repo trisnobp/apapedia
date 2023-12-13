@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile/cart.dart';
-import 'package:frontend_mobile/cart_item.dart';
-import 'package:frontend_mobile/order.dart';
-import 'package:frontend_mobile/order_item.dart';
-import 'package:frontend_mobile/product.dart';
-import 'package:frontend_mobile/user.dart';
-import 'cart_functions.dart';
-import 'package:frontend_mobile/login_page.dart';
-import 'package:frontend_mobile/register_page.dart';
-import 'package:frontend_mobile/catalog_page.dart';
-import 'package:frontend_mobile/order_history_page.dart';
+import 'package:frontend_mobile/dto/cart.dart';
+import 'package:frontend_mobile/dto/cart_item.dart';
+import 'package:frontend_mobile/dto/order.dart';
+import 'package:frontend_mobile/dto/order_item.dart';
+import 'package:frontend_mobile/dto/product.dart';
+import 'package:frontend_mobile/dto/user.dart';
+import 'package:frontend_mobile/pages/login_page.dart';
+import 'package:frontend_mobile/pages/register_page.dart';
+import 'package:frontend_mobile/pages/catalog_page.dart';
+import 'package:frontend_mobile/pages/order_history_page.dart';
 import 'confirm_order_page.dart';
 
 class CartPage extends StatefulWidget {
-  final Customer customer;
+  //final Customer customer;
 
-  CartPage({Key? key, required this.customer}) : super(key: key);
+  CartPage({Key? key}) : super(key: key);
 
   @override
   _CartPageState createState() => _CartPageState();
@@ -28,7 +27,7 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     //ambil cart dia skrg dr cart_functions
-    cart = getCartDetails(widget.customer);
+    //cart = getCartDetails(widget.customer);
   }
 
   void _updateQuantity(int cartItemId, int newQuantity) { //buat update
@@ -48,17 +47,17 @@ class _CartPageState extends State<CartPage> {
       );
     }).toList();
 
-    Order order = Order(
-      id: DateTime.now().millisecondsSinceEpoch,
-      customer: widget.customer,
-      seller: Seller(),
-      status: setStatusPertama,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      orderItems: orderItems,
-    );
+   // Order order = Order(
+      //id: DateTime.now().millisecondsSinceEpoch,
+      //customer: widget.customer,
+      //seller: Seller(),
+      //status: setStatusPertama,
+      //createdAt: DateTime.now(),
+      //updatedAt: DateTime.now(),
+      //orderItems: orderItems,
+    //);
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmOrderPage(customer: widget.customer, order: order)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmOrderPage()));
   }
 
   @override
