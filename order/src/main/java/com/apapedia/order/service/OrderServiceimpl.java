@@ -45,8 +45,8 @@ public class OrderServiceimpl implements OrderService {
     private final WebClient webClientUser;
 
     public OrderServiceimpl(WebClient.Builder webClientBuilder) {
-        this.webClientCatalogue = webClientBuilder.baseUrl("http://localhost:8081/api").build(); // Server Order
-        this.webClientUser = webClientBuilder.baseUrl("http://localhost:8080/api").build();
+        this.webClientCatalogue = webClientBuilder.baseUrl("apap-050.cs.ui.ac.id/api").build(); // Server Order
+        this.webClientUser = webClientBuilder.baseUrl("apap-052.cs.ui.ac.id/api").build();
     }
 
     @Override

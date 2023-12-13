@@ -1,0 +1,88 @@
+version: '3.3'
+services:
+  web_order:
+    container_name: tk_a_ayu_1_web_order
+    image: apap-registry.cs.ui.ac.id/trisno.bayu/apap-tk-1/order
+    restart: always
+    ports:
+      - "10050:8080"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    env_file:
+      - order/.env
+    depends_on:
+      - db
+    networks:
+      - frontend-network
+      - backend-network
+
+  web_catalogue:
+    container_name: tk_a_ayu_1_web_catalogue
+    image: apap-registry.cs.ui.ac.id/trisno.bayu/apap-tk-1/catalogue
+    restart: always
+    ports:
+      - "10051:8080"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    env_file:
+      - catalog/.env
+    depends_on:
+      - db
+    networks:
+      - frontend-network
+      - backend-network
+
+  web_user:
+    container_name: tk_a_ayu_1_web_user
+    image: apap-registry.cs.ui.ac.id/trisno.bayu/apap-tk-1/user
+    restart: always
+    ports:
+      - "10052:8080"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    env_file:
+      - user/.env
+    depends_on:
+      - db
+    networks:
+      - frontend-network
+      - backend-network
+
+  web_frontend:
+    container_name: tk_a_ayu_1_frontend
+    image: apap-registry.cs.ui.ac.id/trisno.bayu/apap-tk-1/frontend
+    restart: always
+    ports:
+      - "10053:8080"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    networks:
+      - frontend-network
+
+  db:
+    container_name: tk_a_ayu_1_db
+    image: postgres:14-alpine
+    ports:
+      - '15050:5432'
+    restart: 'no'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret99
+    volumes:
+      - db_order:/var/lib/postgresql/data
+    networks:
+      - backend-network
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge

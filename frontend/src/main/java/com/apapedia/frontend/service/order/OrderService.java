@@ -17,7 +17,7 @@ public class OrderService {
     private final WebClient webClient;
 
     public OrderService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8082/api").build(); // Server User
+        this.webClient = webClientBuilder.baseUrl("apap-050.cs.ui.ac.id/api").build(); // Server User
     }
 
     public HashMap<String, Long> getTopFiveProducts(UUID sellerId) {

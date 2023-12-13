@@ -18,7 +18,7 @@ public class UserService {
     private final WebClient webClient;
 
     public UserService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8080/api").build(); // Server User
+        this.webClient = webClientBuilder.baseUrl("apap-052.cs.ui.ac.id/api").build(); // Server User
     }
 
     public boolean checkTokenValidity(String token) {
