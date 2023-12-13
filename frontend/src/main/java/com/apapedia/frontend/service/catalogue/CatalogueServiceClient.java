@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.apapedia.frontend.DTO.request.CatalogueDetailDTO;
 
 // Gilang : membuat service API untuk berkomunikasi dengan microservice catalog Service
-@FeignClient(name = "catalogue", url = "http://localhost:8081/api/catalogue")
+@FeignClient(name = "catalogue", url = "apap-051.cs.ui.ac.id/api/catalogue")
 public interface CatalogueServiceClient {
 
     @GetMapping("/{id}")
