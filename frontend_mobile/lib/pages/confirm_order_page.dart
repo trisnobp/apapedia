@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile/cart.dart';
-import 'package:frontend_mobile/cart_item.dart';
-import 'package:frontend_mobile/order.dart';
-import 'package:frontend_mobile/order_item.dart';
-import 'package:frontend_mobile/product.dart';
-import 'package:frontend_mobile/user.dart';
-import 'cart_functions.dart';
-import 'package:frontend_mobile/login_page.dart';
-import 'package:frontend_mobile/register_page.dart';
-import 'package:frontend_mobile/catalog_page.dart';
-import 'package:frontend_mobile/order_history_page.dart';
-import 'package:frontend_mobile/cart_page.dart';
+import 'package:frontend_mobile/dto/cart.dart';
+import 'package:frontend_mobile/dto/cart_item.dart';
+import 'package:frontend_mobile/dto/order.dart';
+import 'package:frontend_mobile/dto/order_item.dart';
+import 'package:frontend_mobile/dto/product.dart';
+import 'package:frontend_mobile/dto/user.dart';
+import 'package:frontend_mobile/pages/login_page.dart';
+import 'package:frontend_mobile/pages/register_page.dart';
+import 'package:frontend_mobile/pages/catalog_page.dart';
+import 'package:frontend_mobile/pages/order_history_page.dart';
+import 'package:frontend_mobile/pages/cart_page.dart';
 
 class ConfirmOrderPage extends StatefulWidget {
-  final Customer customer;
-  final Order order;
 
-  ConfirmOrderPage({Key? key, required this.customer, required this.order}) : super(key: key);
+  ConfirmOrderPage({Key? key}) : super(key: key);
 
   @override
   _ConfirmOrderPageState createState() => _ConfirmOrderPageState();
@@ -28,13 +25,13 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
   @override
   void initState() {
     super.initState();
-    total = widget.order.calculateAndUpdateTotal();
+    //total = widget.order.calculateAndUpdateTotal();
   }
 
   void _confirmOrderAndNavigate() {
     // tambahin order ke db etc
     Navigator.pushReplacement(context,
-      MaterialPageRoute(builder: (context) => OrderHistoryPage(customer: widget.customer)),
+      MaterialPageRoute(builder: (context) => OrderHistoryPage()),
     );
   }
 
@@ -48,17 +45,17 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
         children: <Widget>[
           Expanded(
             child: ListView.builder(
-              itemCount: widget.order.orderItems.length,
+              //itemCount: widget.order.orderItems.length,
               itemBuilder: (context, index) {
-                var item = widget.order.orderItems[index];
+                //var item = widget.order.orderItems[index];
                 return ListTile(
-                  title: Text(item.name),
+                  title: Text("Barang"),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Price: ${item.price}'),
-                      Text('Quantity: ${item.quantity}'),
-                      Text('Total: ${item.price * item.quantity}'),
+                      Text('Price: Rp50000'),
+                      Text('Quantity: 30'),
+                      Text('Total: 40'),
                     ],
                   ),
                 );

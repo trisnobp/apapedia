@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'package:frontend_mobile/utils/user_functions.dart';
+import 'package:provider/provider.dart';
+import '../main.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,26 +10,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _usernameOrEmailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  void _login() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-
-    // Perform login logic here
-
-    // customer = set customer yang lagi pake
-    isLoggedIn = true;
-    //
-
-    // Assuming login is successful, navigate to the catalog page
-    Navigator.pushReplacementNamed(context, '/catalog');
+  showLoading(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
+    final request = Provider.of<UserFunctions>(context);
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(),
@@ -61,10 +63,9 @@ class _LoginPageState extends State<LoginPage> {
               height: 60, // Fixed height for text fields
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
-                controller: _usernameController,
+                controller: _usernameOrEmailController,
                 decoration: InputDecoration(
-                  labelText: 'Email address',
-                  hintText: 'name@gmail.com',
+                  labelText: 'Username or Email',
                 ),
               ),
             ),
@@ -96,7 +97,37 @@ class _LoginPageState extends State<LoginPage> {
                   primary: Colors.yellow,
                   onPrimary: Colors.black,
                 ),
-                onPressed: _login,
+                onPressed: () async {
+                  showLoading(context);
+
+                  final response = await request.login({
+                    "usernameOrEmail": _usernameOrEmailController.text,
+                    "password": _passwordController.text
+                  });
+
+                  Navigator.pop(context);
+
+                  if (response.status == true) {
+                    Navigator.pushNamed(context, "/customer");
+                    Flushbar(
+                      backgroundColor: const Color.fromARGB(255, 29, 167, 86),
+                      flushbarPosition: FlushbarPosition.TOP,
+                      title: "Berhasil",
+                      duration: const Duration(seconds: 3),
+                      message: response.message,
+                    ).show(context);
+                  } else {
+                    Navigator.pushNamed(context, "/login");
+                        Flushbar(
+                          backgroundColor:
+                              const Color.fromARGB(255, 244, 105, 77),
+                          flushbarPosition: FlushbarPosition.TOP,
+                          title: "Gagal",
+                          duration: const Duration(seconds: 3),
+                          message: response.message,
+                        ).show(context);
+                  }
+                },
                 child: Text('Sign in'),
               ),
             ),
@@ -104,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               onPressed: () {
                 // Navigate to the registration page when the link is pressed
-                Navigator.pushNamed(context, '/registerPage');
+                Navigator.pushNamed(context, '/register');
               },
               child: Text(
                 'Don\'t have an account? Sign up',
