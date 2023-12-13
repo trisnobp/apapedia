@@ -12,6 +12,7 @@ class CustomerPage extends StatefulWidget {
   const CustomerPage({super.key, required this.idx});
   final int idx;
 
+
   @override
   State<CustomerPage> createState() => _CustomerPageState(idx);
 }
@@ -19,7 +20,7 @@ class CustomerPage extends StatefulWidget {
 class _CustomerPageState extends State<CustomerPage> {
   _CustomerPageState(this._selectedIndex);
   int _selectedIndex;
-  bool? isLoggedIn = true;
+  bool? isLoggedIn = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,6 +35,7 @@ class _CustomerPageState extends State<CustomerPage> {
   @override
   Widget build(BuildContext context) {
     //setIsLoggedIn();
+    double screenWidth = MediaQuery.of(context).size.width;
 
     List<Widget> _widgetOptions = <Widget>[
       CatalogPage(),
@@ -48,7 +50,7 @@ class _CustomerPageState extends State<CustomerPage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor:  const Color.fromARGB(255, 245, 245, 245),
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.black),
           centerTitle: true,
@@ -63,7 +65,7 @@ class _CustomerPageState extends State<CustomerPage> {
         ),
         bottomNavigationBar: isLoggedIn!
             ? BottomNavigationBar(
-                backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+                backgroundColor: Colors.black,
                 items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                     icon: Icon(Icons.shop_2_rounded),
@@ -84,7 +86,7 @@ class _CustomerPageState extends State<CustomerPage> {
                 ],
                 currentIndex: _selectedIndex,
                 unselectedItemColor: Colors.black,
-                selectedItemColor: const Color.fromARGB(255, 5, 89, 91),
+                selectedItemColor: Colors.orange[900],
                 onTap: _onItemTapped,
               )
             : null,
@@ -92,7 +94,7 @@ class _CustomerPageState extends State<CustomerPage> {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Container(
-                  height: 60,
+                  height: screenWidth*0.2,
                   decoration: BoxDecoration(
                     // border: Border.all(color: Colors.black),
                     color: Colors.transparent,
@@ -100,12 +102,15 @@ class _CustomerPageState extends State<CustomerPage> {
                   ),
                   child: Row(
                     children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                      ),
                       Expanded(
                         child: Container(
-                          height: 60,
+                          height: screenWidth*0.125,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.orange,
+                            color: Colors.black,
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: TextButton(
@@ -115,38 +120,59 @@ class _CustomerPageState extends State<CustomerPage> {
                                     MaterialPageRoute(
                                         builder: (context) => RegisterPage()));
                               },
-                              child: const Text(
+                              child: Text(
                                 "Register",
                                 style: TextStyle(
-                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    fontSize: screenWidth*0.03,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.w600,)
                               )),
                         ),
                       ),
+                      SizedBox(width: 16,),
                       Expanded(
                         child: Container(
-                          height: 60,
+                            height: screenWidth*0.125,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.orange,
                             borderRadius: BorderRadius.circular(18),
                           ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginPage()));
-                            },
-                            child: const Text("Sign In",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.bold)),
-                          ),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.orange,//e Set border color
+                                  width: 2.0, // Set border width
+                                ),
+                                borderRadius: BorderRadius.circular(18.0), // Set border radius (optional)
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => LoginPage()),
+                                  );
+                                },
+                                child: Text(
+                                  "Sign In",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: screenWidth*0.03,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+
+                                  ),
+                                ),
+                              ),
+                            )
+
                         ),
-                      )
+
+                        ),Padding(
+                        padding: EdgeInsets.all(8.0),
+                      ),
+
                     ],
                   ),
                 ),

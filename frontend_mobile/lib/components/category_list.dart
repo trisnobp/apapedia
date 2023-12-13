@@ -1,290 +1,111 @@
 import 'package:flutter/material.dart';
 
 class CategoryList extends StatelessWidget {
-  const CategoryList({super.key});
+  const CategoryList({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return ExpansionTile(
-      title: const Text("Product Category"),
+      title: Text(
+        "Product Category",
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: screenWidth * 0.03,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+        ),
+      ),
       children: [
-        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                              children: [
-                                Icon(
-                                  Icons.shopping_bag_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Aksesoris Fashion")
-                              ],
-                            ),
-                        ),
-                        ),
-                      Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                              children: [
-                                Icon(
-                                  Icons.menu_book_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Buku & Alat Tulis")
-                              ],
-                            ),
-                        ),
-                        ),
-                      Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.phone_android_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Elektronik")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.baby_changing_station_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Fashion Bayi & Anak")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.abc_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Fashion Muslim")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.camera_alt_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Fotografi")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.collections_bookmark_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Hobi & Koleksi")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.watch,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Jam Tangan")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.abc_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Perawatan & Kecantikan")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.food_bank_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Makanan & Minuman")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.car_repair_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Otomotif")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.house_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Perlengkapan Rumah")
-                              ],
-                            ),
-                        ),
-                        ),
-                        Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                        color: const Color(0xfff5f5dc),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                              children:  [
-                                Icon(
-                                  Icons.party_mode_rounded,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text("Souvenir & Party Supplies")
-                              ],
-                            ),
-                        ),
-                        ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+        buildCategoryCard(
+          icon: Icons.shopping_bag_rounded,
+          label: "Aksesoris Fashion",
+        ),
+        buildCategoryCard(
+          icon: Icons.menu_book_rounded,
+          label: "Buku & Alat Tulis",
+        ),
+        buildCategoryCard(
+          icon: Icons.phone_android_rounded,
+          label: "Elektronik",
+        ),
+        buildCategoryCard(
+          icon: Icons.baby_changing_station_rounded,
+          label: "Fashion Bayi & Anak",
+        ),
+        buildCategoryCard(
+          icon: Icons.abc_rounded,
+          label: "Fashion Muslim",
+        ),
+        buildCategoryCard(
+          icon: Icons.camera_alt_rounded,
+          label: "Fotografi",
+        ),
+        buildCategoryCard(
+          icon: Icons.collections_bookmark_rounded,
+          label: "Hobi & Koleksi",
+        ),
+        buildCategoryCard(
+          icon: Icons.watch,
+          label: "Jam Tangan",
+        ),
+        buildCategoryCard(
+          icon: Icons.abc_rounded,
+          label: "Perawatan & Kecantikan",
+        ),
+        buildCategoryCard(
+          icon: Icons.food_bank_rounded,
+          label: "Makanan & Minuman",
+        ),
+        buildCategoryCard(
+          icon: Icons.car_repair_rounded,
+          label: "Otomotif",
+        ),
+        buildCategoryCard(
+          icon: Icons.house_rounded,
+          label: "Perlengkapan Rumah",
+        ),
+        buildCategoryCard(
+          icon: Icons.party_mode_rounded,
+          label: "Souvenir & Party Supplies",
+        ),
+        const SizedBox(
+          height: 8,
+        ),
       ],
+    );
+  }
+
+  Widget buildCategoryCard({required IconData icon, required String label}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4),
+      child: Card(
+        color: Colors.white, // Set card color to transparent
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 28,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                  fontFamily: 'Poppins', // Set the font family to Poppins
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

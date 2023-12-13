@@ -17,15 +17,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _emailController;
   late TextEditingController _addressController;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _nameController = TextEditingController(text: widget.customer.name);
-  //   _usernameController = TextEditingController(text: widget.customer.username);
-  //   _emailController = TextEditingController(text: widget.customer.email);
-  //   _addressController = TextEditingController(text: widget.customer.address);
-  // }
-
   @override
   void dispose() {
     _nameController.dispose();

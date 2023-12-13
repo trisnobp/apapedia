@@ -38,15 +38,26 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              TextButton(
                 onPressed: () {
-                  // BE SINI BELOM
-                  Navigator.of(context).pop(); // Close the bottom sheet
+                  Navigator.of(context).pop();
                 },
-                child: Text('Withdraw'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
+                child: Text(
+                  'Withdraw',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,// Set the font family to Poppins
+                  ),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 ),
               ),
             ],
@@ -61,20 +72,59 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Sign Out"),
-          content: Text("Are you sure you want to sign out?"),
+          title: Text("Sign Out",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              fontSize: 24,),),
+          content: Text("Are you sure you want to sign out?",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,),),
           actions: <Widget>[
             TextButton(
-              child: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,// Set the font family to Poppins
+                ),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              ),
             ),
             TextButton(
-              child: Text("Sign Out"),
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/login');
+                Navigator.of(context).pop();
               },
+              child: Text(
+                'Sign out',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,// Set the font family to Poppins
+                ),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
             ),
           ],
         );
@@ -87,20 +137,59 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Delete Account"),
-          content: Text("Are you sure you want to delete your account? This action cannot be undone."),
+          title: Text("Delete Account",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              fontSize: 24,),),
+          content: Text("Are you sure you want to delete your account? This action cannot be undone.",
+                style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+                fontSize: 14,),),
           actions: <Widget>[
             TextButton(
-              child: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,// Set the font family to Poppins
+                ),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              ),
             ),
             TextButton(
-              child: Text("Delete"),
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/register');
+                Navigator.of(context).pop();
               },
+              child: Text(
+                'Delete account',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,// Set the font family to Poppins
+                ),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
             ),
           ],
         );
@@ -110,7 +199,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _balanceCard(Customer customer) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -139,86 +228,178 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 75,
-                      backgroundImage: NetworkImage("https://via.placeholder.com/150"),
+      body: Column(
+        children: [
+          const Expanded(flex: 2, child: _TopPortion()),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    "TESTING JOAN EHEHE", // Replace with actual data
+                    style: TextStyle(
+                      fontFamily: 'Poppins', // Set the font family to Poppins
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 10),
-                    //Text(widget.customer.name, style: TextStyle(fontSize: 24)),
-                    //Text('Customer', style: TextStyle(color: Colors.grey)),
-                    //_balanceCard(widget.customer),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: <Widget>[
-                    //_buildDetailRow('Username', widget.customer.username),
-                    //_buildDetailRow('Full Name', widget.customer.name),
-                    //_buildDetailRow('Email', widget.customer.email),
-                    //_buildDetailRow('Address', widget.customer.address),
-                    ElevatedButton(
-                      onPressed: _editProfile,
-                      child: Text('Edit profile'),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.orange, // background (button) color
-                        onPrimary: Colors.white, // foreground (text) color
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: _withdrawBalance,
+                    child: Text(
+                      'Withdraw Balance',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,// Set the font family to Poppins
                       ),
                     ),
-                  ],
-                ),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(right: 8.0),
+                          child: TextButton(
+                            onPressed: _signOut,
+                            child: Text(
+                              'Sign Out',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,// Set the font family to Poppins
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 8.0),
+                          child: TextButton(
+                            onPressed: _deleteAccount,
+                            child: Text(
+                              'Delete Account',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,// Set the font family to Poppins
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            ElevatedButton(
-              onPressed: _signOut,
-              child: Text('Sign Out'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _deleteAccount,
-              child: Text('Delete Account'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildDetailRow(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(value),
-        ],
-      ),
+class _TopPortion extends StatelessWidget {
+  const _TopPortion({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 50),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Colors.orange,
+                Colors.deepOrange,
+              ],
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(50),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            width: 150,
+            height: 150,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80',
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      child: Icon(Icons.edit, color: Colors.black), // Pencil icon inside the circle
+                    ),
+                    onPressed: () {
+                      // Navigate to the edit profile page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditProfilePage()),
+                      );
+                    },
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

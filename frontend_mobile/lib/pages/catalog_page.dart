@@ -16,13 +16,15 @@ class CatalogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     setIsLoggedIn();
 
     return SafeArea(
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return const [
+            return [
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.all(8),
@@ -35,13 +37,17 @@ class CatalogPage extends StatelessWidget {
                       ),
                       Center(
                         child: Text(
-                          "All Catalogues",
+                          "APAPEDIA",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w500),
+                              fontFamily: 'Poppins',
+                              fontSize: screenWidth * 0.07,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.orange,),
+
                         ),
                       ),
                       SizedBox(
-                        height: 25,
+                        height: screenWidth * 0.1,
                       ),
                     ],
                   ),

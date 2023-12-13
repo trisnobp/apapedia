@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
             Text(
               'APAPEDIA',
               style: TextStyle(
-                color: Colors.blue,
+                color: Colors.orange,
                 fontFamily: 'Poppins',
                 fontSize: 48,
                 fontWeight: FontWeight.w700,
@@ -94,8 +94,8 @@ class _LoginPageState extends State<LoginPage> {
               height: 50, // Fixed height for the button
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.yellow,
-                  onPrimary: Colors.black,
+                  primary: Colors.black,
+                  onPrimary: Colors.white,
                 ),
                 onPressed: () async {
                   showLoading(context);
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
                 'Don\'t have an account? Sign up',
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: Colors.orange,
                   fontFamily: 'Poppins',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,

@@ -24,6 +24,7 @@ import 'package:provider/provider.dart';
 //global variables
 bool isLoggedIn = false;
 bool isRegistered = false;
+const primaryColor = Colors.grey;
 
 void main() {
   runApp(const MyApp());
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'APAPEDIA',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+            primaryColor: primaryColor,
             useMaterial3: true,
           ),
           initialRoute: '/customer',
