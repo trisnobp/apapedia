@@ -1,38 +1,18 @@
-package com.apapedia.order.DTO.request;
-
-import java.util.UUID;
-
-import com.apapedia.order.model.Cart;
+package com.apapedia.order.dto.request;
 import com.apapedia.order.model.Order;
 import com.apapedia.order.model.OrderItemId;
+import lombok.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-
+@Data
 public class OrderItemDTO {
-    private OrderItemId orderItemId ;
     private UUID productId;
-
-
-
-    private Order order;
-
-    private Integer quantity ;
-
-    private Integer productName;
-
-
-    private Integer productPrice;
-
+    private Integer quantity;
+    private String productName;
+    private Long productPrice;
 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Update Order Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <style>
+
+
+        .custom-card {
+            height: 200px;
+            width: 350px;
+            background-image:linear-gradient(rgba(242, 120, 75, 1),rgba(242, 120, 75, 0.8));
+            border-radius: 20px;
+            color:white;
+            margin:20px;
+            font-size: 16px;
+            box-shadow: 2px 2px 20px #707070;
+        }
+        .credit-card {
+            width: 100%;
+        }
+        .btn-outline-orange {
+            color: #ff5722;
+            background-color: transparent;
+            border-color: #ff5722;
+        }
+
+        .btn-outline-orange:hover {
+            color: #fff;
+            background-color: #FF8C00;
+        }
+
+       .btn-outline-red {
+            color: #ff0000; /* Red color for text */
+            background-color: transparent;
+            border-color: #ff0000; /* Red color for border */
+        }
+
+        .btn-outline-red:hover {
+            color: #fff; /* White text on hover */
+            background-color: #ff0000; /* Red background on hover */
+        }
+        .center-button {
+            display: flex;
+            justify-content: start;
+        }
+
+        .primary-button {
+            background-color: #FAD000;
+            border: none;
+            border-radius: 30px;
+            width: 200px;
+            height: 48px;
+        }
+    </style>
+</head>
+<body>
+<div class="mx-4">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+</div>
+
+<div class="text-center pt-3">
+    <h2>Order Status</h2>
+</div>
+
+<div class="container mt-5 d-flex align-items-center justify-content-center">
+    <div class="card" style="border-radius: 30px; width: 50%;">
+        <div class="card-body"> <!-- Added text-center class -->
+            <form method="POST" th:object="${orderDTO}" th:action="@{/order/__${orderDTO.idOrder}__/update}">
+                <label for="status" class="form-label mx-auto">Choose Order Status</label>
+                <input class="form-control" type="hidden" th:field="*{idOrder}"/>
+                <select class="form-select" id="status" th:field="*{status}">
+                    <option th:value="0">Menunggu Konfirmasi</option>
+                    <option th:value="1">Dikonfirmasi Penjual</option>
+                    <option th:value="2">Menunggu Kurir</option>
+                    <option th:value="3">Dalam Perjalanan</option>
+                </select>
+                <br><br>
+                <div class="d-flex flex-row align-items-center text-center">
+                    <div class="center-button mx-auto">
+                        <button style="background: #FF8C00;" type="submit" class="primary-button text-light">Update</button>
+                    </div>
+                </div>
+            </form>
+            <div class="ml-3 mt-3 text-danger d-flex align-items-center justify-content-center" id="message" th:text="${error}" th:if="${error}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

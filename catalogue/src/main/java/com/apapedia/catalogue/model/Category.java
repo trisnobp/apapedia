@@ -1,6 +1,8 @@
 package com.apapedia.catalogue.model;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -17,7 +19,7 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "category") 
+@Table(name = "category")
 public class Category {
     @Id
     private UUID id = UUID.randomUUID();
@@ -30,7 +32,7 @@ public class Category {
     @JsonManagedReference
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Catalogue> catalogs;
-    
+
     public enum CategoryName {
         AKSESORIS_FASHION("Aksesoris Fashion"),
         BUKU_ALAT_TULIS("Buku & Alat Tulis"),
@@ -57,6 +59,5 @@ public class Category {
             return displayName;
         }
 
-        
     }
 }

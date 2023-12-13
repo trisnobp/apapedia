@@ -1,8 +1,13 @@
 package com.apapedia.catalogue.service;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.apapedia.catalogue.DTO.request.UpdateCatalogueRequestDTO;
+import com.apapedia.catalogue.DTO.response.ResponseCatalogueDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,32 +28,55 @@ public class CatalogueServiceImpl implements CatalogueService{
     @Autowired
     CategoryDb categoryDb;
 
+    public Optional<Category.CategoryName> findCategoryByName(String display) {
+        return Arrays.stream(Category.CategoryName.values())
+                .filter(category -> category.toString().equals(display))
+                .findFirst();
+    }
+
     @Override
     public Catalogue createCatalogue(CreateCatalogueRequestDTO catalogueDTO) {
-        Category category = catalogueDTO.getCategory();
-
-        if (category == null || !categoryDb.existsById(category.getId())) {
-            throw new RuntimeException("Category not found or invalid");
-        }
+        var categoryName = findCategoryByName(catalogueDTO.getCategory()); // Get the category name
+        var newCategory = categoryDb.findByNamaCategory(categoryName.get()).get();
 
         Catalogue newCatalogue = new Catalogue();
-        newCatalogue.setCategory(category);
-        newCatalogue.setPrice(catalogueDTO.getPrice()); 
+        newCatalogue.setCategory(newCategory);
+        newCatalogue.setPrice(catalogueDTO.getPrice());
         newCatalogue.setSellerId(catalogueDTO.getSellerId());
         newCatalogue.setProductName(catalogueDTO.getProductName());
         newCatalogue.setProductDesc(catalogueDTO.getProductDesc());
         newCatalogue.setStock(catalogueDTO.getStock());
         newCatalogue.setImage(catalogueDTO.getImage());
-         newCatalogue.setName(catalogueDTO.getName());
-    
-        
+
         return catalogueDb.save(newCatalogue);
     }
-    
+
+    @Override
+    public Catalogue updateCatalogue(UpdateCatalogueRequestDTO catalogueDTO) {
+        // Get catalogue by Id
+        var catalogueById = catalogueDb.findById(catalogueDTO.getId()).get();
+
+        // Get category
+        var categoryName = findCategoryByName(catalogueDTO.getDisplayCategory()); // Get the category name
+        var newCategory = categoryDb.findByNamaCategory(categoryName.get()).get();
+
+        // Update catalogue
+        catalogueById.setCategory(newCategory);
+        catalogueById.setPrice(catalogueDTO.getPrice());
+
+        if (!catalogueDTO.getImage().isEmpty()) {
+            catalogueById.setImage(catalogueDTO.getImage());
+        }
+        catalogueById.setStock(catalogueDTO.getStock());
+        catalogueById.setProductDesc(catalogueDTO.getProductDesc());
+        catalogueById.setProductName(catalogueDTO.getProductName());
+        return catalogueDb.save(catalogueById);
+    }
+
     @Override
     public List<Catalogue> retrieveAllCatalogue() {
-        return catalogueDb.findAllByOrderByProductNameAsc();
-    }
+        return catalogueDb.findByStockNotOrderByProductNameAsc(0);
+    } // Get All Products that has > 0 stock
 
     @Override
     public Optional<Catalogue> getCatalogueById(UUID id) {
@@ -67,12 +95,30 @@ public class CatalogueServiceImpl implements CatalogueService{
 
     @Override
     public List<Catalogue> findByProductName(String productName) {
-        return catalogueDb.findByProductNameContaining(productName);
+        return catalogueDb.findByProductNameContainingIgnoreCase(productName);
+    }
+
+    @Override
+    public List<Catalogue> findByPriceRange(BigDecimal startPrice, BigDecimal endPrice) {
+        return catalogueDb.findByPriceBetween(startPrice, endPrice);
+    }
+
+    @Override
+    public List<Catalogue> findBySorted(String sortedBy, String order) {
+        // 4 Possibilities
+        if (sortedBy.equals("price") && order.equals("asc")) {
+            return catalogueDb.findByOrderByPriceAsc();
+        } else if (sortedBy.equals("price") && order.equals("desc")) {
+            return catalogueDb.findByOrderByPriceDesc();
+        } else if (sortedBy.equals("product") && order.equals("asc")) {
+            return catalogueDb.findByOrderByProductNameAsc();
+        } else {
+            return catalogueDb.findByOrderByProductNameDesc();
+        }
     }
 
     @Override
     public List<Catalogue> getCataloguesBySellerId(UUID sellerId) {
         return catalogueDb.findBySellerId(sellerId);
     }
-    
 }

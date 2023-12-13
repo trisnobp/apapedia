@@ -1,0 +1,167 @@
+default:
+  tags:
+    - apap
+
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == 'main'
+
+
+before_script:
+  - docker info
+  - javac -version
+
+
+variables:
+  IMAGE_OPENJDK_GRADLE: gradle:7.3.3-jdk17-alpine
+  IMAGE_DOCKER_DIND: docker:20.10.16
+
+
+stages:
+  - build-order
+  - build-catalogue
+  - build-user
+  - build-frontend
+  - test
+  - build-image
+  - publish-image
+  - deploy
+
+
+build-order:
+  image: $IMAGE_OPENJDK_GRADLE
+  stage: build-order
+  script:
+    - echo "Compiling the code..."
+    - cd $CI_PROJECT_DIR/order
+    - sh gradlew clean assemble
+    - |
+      echo "Creating .env file inside order folder..."
+      echo "DATABASE_URL_PROD=$DATABASE_URL_PROD_ORDER" >> .env
+      echo "PROD_USERNAME=$PROD_USERNAME" >> .env
+      echo "PROD_PASSWORD=$PROD_PASSWORD" >> .env
+    - cat .env
+  artifacts:
+    paths:
+      - order/build/libs/order-0.0.1-SNAPSHOT.jar
+      - order/.env
+
+build-catalogue:
+  image: $IMAGE_OPENJDK_GRADLE
+  stage: build-catalogue
+  script:
+    - echo "Compiling the code..."
+    - cd $CI_PROJECT_DIR/catalogue
+    - sh gradlew clean assemble
+    - |
+      echo "Creating .env file inside catalogue folder..."
+      echo "DATABASE_URL_PROD=$DATABASE_URL_PROD_CATALOGUE" >> .env
+      echo "PROD_USERNAME=$PROD_USERNAME" >> .env
+      echo "PROD_PASSWORD=$PROD_PASSWORD" >> .env
+    - cat .env
+  artifacts:
+    paths:
+      - catalogue/build/libs/catalogue-0.0.1-SNAPSHOT.jar
+      - catalogue/.env
+
+build-user:
+  image: $IMAGE_OPENJDK_GRADLE
+  stage: build-user
+  script:
+    - echo "Compiling the code..."
+    - cd $CI_PROJECT_DIR/user
+    - sh gradlew clean assemble
+    - |
+      echo "Creating .env file inside user folder..."
+      echo "DATABASE_URL_PROD=$DATABASE_URL_PROD_USER" >> .env
+      echo "PROD_USERNAME=$PROD_USERNAME" >> .env
+      echo "PROD_PASSWORD=$PROD_PASSWORD" >> .env
+    - cat .env
+  artifacts:
+    paths:
+      - user/build/libs/user-0.0.1-SNAPSHOT.jar
+      - user/.env
+
+build-frontend:
+  image: $IMAGE_OPENJDK_GRADLE
+  stage: build-frontend
+  script:
+    - echo "Compiling the code..."
+    - cd $CI_PROJECT_DIR/frontend
+    - sh gradlew clean assemble
+  artifacts:
+    paths:
+      - frontend/build/libs/frontend-0.0.1-SNAPSHOT.jar
+
+build-image:
+  stage: build-image
+  script:
+    - echo "Building Docker Image for Order component..."
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/order:$CI_COMMIT_SHORT_SHA ./order
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/order:latest ./order
+
+    - echo "Building Docker Image for Catalogue component..."
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/catalogue:$CI_COMMIT_SHORT_SHA ./catalogue
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/catalogue:latest ./catalogue
+
+    - echo "Building Docker Image for User component..."
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/user:$CI_COMMIT_SHORT_SHA ./user
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/user:latest ./user
+
+    - echo "Building Docker Image for Frontend component..."
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/frontend:$CI_COMMIT_SHORT_SHA ./frontend
+    - docker build -t $REGISTRY_SERVER/trisno.bayu/apap-tk-1/frontend:latest ./frontend
+
+
+publish-image:
+  stage: publish-image
+  script:
+    - echo "Publishing Docker Image..."
+    - echo $REGISTRY_SERVER
+    - echo $REGISTRY_PASSWORD | docker login --username $REGISTRY_USERNAME --password-stdin $REGISTRY_SERVER
+
+    - echo "Publishing Docker Images for Order component..."
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/order:$CI_COMMIT_SHORT_SHA
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/order:latest
+
+    - echo "Publishing Docker Images for Catalogue component..."
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/catalogue:$CI_COMMIT_SHORT_SHA
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/catalogue:latest
+
+    - echo "Publishing Docker Images for User component..."
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/user:$CI_COMMIT_SHORT_SHA
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/user:latest
+
+    - echo "Publishing Docker Images for Frontend component..."
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/frontend:$CI_COMMIT_SHORT_SHA
+    - docker push $REGISTRY_SERVER/trisno.bayu/apap-tk-1/frontend:latest
+
+
+deploy:
+  stage: deploy
+  before_script:
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
+    - eval $(ssh-agent -s)
+    - echo "$DEPLOY_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+
+  script:
+    - echo "Deploy to server..."
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "mkdir -p ~/apap-cicd-tk-1/order/"
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "mkdir -p ~/apap-cicd-tk-1/catalogue/"
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "mkdir -p ~/apap-cicd-tk-1/user/"
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "mkdir -p ~/apap-cicd-tk-1/frontend/"
+
+    - rsync -rahv $CI_PROJECT_DIR/order/.env "${DEPLOY_USERNAME}@${DEPLOY_SERVER}:~/apap-cicd-tk-1/order/"
+    - rsync -rahv $CI_PROJECT_DIR/catalogue/.env "${DEPLOY_USERNAME}@${DEPLOY_SERVER}:~/apap-cicd-tk-1/catalogue/"
+    - rsync -rahv $CI_PROJECT_DIR/user/.env "${DEPLOY_USERNAME}@${DEPLOY_SERVER}:~/apap-cicd-tk-1/user/"
+    - rsync -rahv $CI_PROJECT_DIR/docker-compose-deploy.yml "${DEPLOY_USERNAME}@${DEPLOY_SERVER}:~/apap-cicd-tk-1/"
+
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "export COMPOSE_HTTP_TIMEOUT=200"
+    - ssh "${DEPLOY_USERNAME}@${DEPLOY_SERVER}" "cd ~/apap-cicd-tk-1/ && docker-compose -f docker-compose-deploy.yml down && docker-compose -f docker-compose-deploy.yml pull && docker-compose -f docker-compose-deploy.yml up -d"

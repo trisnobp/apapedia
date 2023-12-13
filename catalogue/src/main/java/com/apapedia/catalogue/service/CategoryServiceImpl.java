@@ -1,6 +1,9 @@
 package com.apapedia.catalogue.service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.apapedia.catalogue.DTO.response.CategoryDetailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +24,19 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     private final List<Category.CategoryName> predefinedCategories = List.of(
-        Category.CategoryName.AKSESORIS_FASHION,
-        Category.CategoryName.BUKU_ALAT_TULIS,
-        Category.CategoryName.ELEKTRONIK,
-        Category.CategoryName.FASHION_BAYI_ANAK,
-        Category.CategoryName.FASHION_MUSLIM,
-        Category.CategoryName.FOTOGRAFI,
-        Category.CategoryName.HOBI_KOLEKSI,
-        Category.CategoryName.JAM_TANGAN,
-        Category.CategoryName.PERAWATAN_KECANTIKAN,
-        Category.CategoryName.MAKANAN_MINUMAN,
-        Category.CategoryName.OTOMOTIF,
-        Category.CategoryName.PERLENGKAPAN_RUMAH,
-        Category.CategoryName.SOUVENIR_PARTY_SUPPLIES
+            Category.CategoryName.AKSESORIS_FASHION,
+            Category.CategoryName.BUKU_ALAT_TULIS,
+            Category.CategoryName.ELEKTRONIK,
+            Category.CategoryName.FASHION_BAYI_ANAK,
+            Category.CategoryName.FASHION_MUSLIM,
+            Category.CategoryName.FOTOGRAFI,
+            Category.CategoryName.HOBI_KOLEKSI,
+            Category.CategoryName.JAM_TANGAN,
+            Category.CategoryName.PERAWATAN_KECANTIKAN,
+            Category.CategoryName.MAKANAN_MINUMAN,
+            Category.CategoryName.OTOMOTIF,
+            Category.CategoryName.PERLENGKAPAN_RUMAH,
+            Category.CategoryName.SOUVENIR_PARTY_SUPPLIES
     );
 
     @PostConstruct
@@ -44,19 +47,28 @@ public class CategoryServiceImpl implements CategoryService {
     private void initializeCategories() {
         predefinedCategories.forEach(categoryName -> {
             categoryDb.findByNamaCategory(categoryName)
-                .orElseGet(() -> createCategory(categoryName));
+                    .orElseGet(() -> createCategory(categoryName));
         });
     }
 
     private Category createCategory(Category.CategoryName categoryName) {
         Category newCategory = new Category();
-        newCategory.setNamaCategory(categoryName); 
+        newCategory.setNamaCategory(categoryName);
         return categoryDb.save(newCategory);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryDb.findAll();
+    public List<CategoryDetailDTO> getAllCategories() {
+        List<CategoryDetailDTO> listCategoryDTO = new ArrayList<>();
+        var allCategories =  categoryDb.findAll();
+        for (var category: allCategories) {
+            CategoryDetailDTO categoryDTO = new CategoryDetailDTO();
+            categoryDTO.setCategoryName(category.getNamaCategory().toString());
+            categoryDTO.setId(category.getId());
+            listCategoryDTO.add(categoryDTO);
+        }
+
+        return listCategoryDTO;
     }
-    
+
 }

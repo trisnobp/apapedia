@@ -2,142 +2,102 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Login</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-  <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
-  <style>
-    body {
-      font-family: 'DM Mono', monospace;
-      font-family: 'Poppins', sans-serif;
-    }
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <style>
+        body {
+          font-family: 'DM Mono', monospace;
+          font-family: 'Poppins', sans-serif;
+        }
 
-    .form-control {
-      border: none;
-      border-bottom: 1px solid #adb5bd;
-      padding: 5px 10px;
-      outline: none;
-      border-radius: 0;
-    }
+        .form-control {
+          border: none;
+          border-bottom: 1px solid #adb5bd;
+          padding: 5px 10px;
+          outline: none;
+          border-radius: 0;
+        }
 
-    [placeholder]:focus::-webkit-input-placeholder {
-      border: none;
-      border-bottom: 1px solid ##1890ff;
-      outline: none;
-      transition: text-indent 0.4s 0.4s ease;
-      text-indent: -100%;
-      opacity: 1;
-      border-radius: 0;
-    }
+        [placeholder]:focus::-webkit-input-placeholder {
+          border: none;
+          border-bottom: 1px solid ##1890ff;
+          outline: none;
+          transition: text-indent 0.4s 0.4s ease;
+          text-indent: -100%;
+          opacity: 1;
+          border-radius: 0;
+        }
 
-    .center-button {
-      display: flex;
-      justify-content: center;
-    }
+        .center-button {
+          display: flex;
+          justify-content: center;
+        }
 
-    .primary-button {
-      background-color: #FAD000;
-      border: none;
-      border-radius: 30px;
-      width: 100%;
-      height: 48px;
-    }
+        .primary-button {
+          background-color: #FAD000;
+          border: none;
+          border-radius: 30px;
+          width: 100%;
+          height: 48px;
+        }
 
 
-  </style>
+    </style>
 
 </head>
 
 <body>
+<div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
 
 <div class="container-fluid d-flex align-items-center" style="height: 100vh;">
-  <div class="container">
-    <div class="row">
+    <div class="container">
+        <div class="row">
 
-      <!-- Left Column -->
-      <div class="col-md-6 d-flex flex-column justify-content-center">
-        <p class="text-center mb-0">Welcome to</p>
-        <h2 class="text-center">APAPEDIA</h2>
-      </div>
-
-      <!-- Right Column -->
-      <div class="col-md-6 d-flex flex-column align-items-center">
-        <div class="align-items-start">
-          <h1 class="text-start">Log In</h1>
-          <form th:action="@{/login}" id="form-login" method="POST">
-
-            <div class="mb-4 pt-3">
-              <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" placeholder="username">
-            </div>
-            <div class="mb-4 pt-3">
-              <label for="username" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password">
+            <!-- Left Column -->
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <div>
+                    <img src="images/shop.jpg" alt="" class="w-100 h-100" />
+                </div>
             </div>
 
-            <br/>
+            <!-- Right Column -->
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="align-items-start">
+                    <h1 class="text-start">Sign In</h1>
+                    <form th:object="${loginDTO}" th:action="@{/login}" id="form-login" method="POST">
 
-            <div class="center-button">
-              <button type="submit" class="primary-button">Log In</button>
+                        <div class="mb-4 pt-3">
+                            <label for="username" class="form-label">Username or Email</label>
+                            <input type="text" class="form-control" id="username" placeholder="Enter Username or Email" th:field="*{usernameOrEmail}" required>
+                        </div>
+                        <div class="mb-4 pt-3">
+                            <label for="username" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter Password" th:field="*{password}" required>
+                        </div>
+
+                        <br/>
+
+                        <div class="center-button">
+                            <button style="background: #FF8C00;" type="submit" class="primary-button text-light">Log In</button>
+                        </div>
+                    </form>
+
+                    <div class="ml-3 mt-3 text-danger" id="message" th:text="${error}" th:if="${error}"></div>
+
+                    <p class="text-secondary mt-3">Don't have an account yet?<a th:href="@{/register}" class="btn btn-link">Register</a></p>
+                </div>
             </div>
-          </form>
-
-          <div id="message">
-          </div>
-
-          <p class="text-secondary mt-3">Don't have an account yet?<a th:href="@{/register}" class="btn btn-link">Register</a></p>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
-  var endpoint = "http://localhost:8083"
-  console.log("Script is running");
-  $(document).on("submit", "#form-login", function (e) {
-    e.preventDefault();
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      contentType: 'application/json',
-      url: "http://localhost:8080/api/account/sellerLogin",
-      data: JSON.stringify({
-        usernameOrEmail: $("#username").val(),
-        password: $("#password").val(),
-      }),
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader("Accept", "application/json");
-        xhr.setRequestHeader("Content-Type", "application/json");
-      },
-      success: function(data) {
-      console.log('Response Data:', data);
-      console.log(data.token);
-        if (data.status == true) {
-          localStorage.setItem("token", JSON.stringify(data.token));
-          let htmlString = ``;
-          htmlString += `\n
-          <div class="success-message">${data.message}</div>
-          `;
-          document.getElementById("message").innerHTML = htmlString;
-
-          setTimeout(function(){
-            document.location.href = endpoint;
-          }, 1500)
-        } else {
-          let htmlString = ``
-          htmlString += `\n
-          <div class="error-message">${data.message}</div>
-          `
-          document.getElementById("message").innerHTML = htmlString
-        }
-        }
-      })
-    });
 
 </script>
 

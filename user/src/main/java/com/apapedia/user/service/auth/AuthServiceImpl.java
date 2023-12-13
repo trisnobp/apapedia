@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     private final WebClient webClient;
 
     public AuthServiceImpl(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8082/api").build(); // Server Order
+        this.webClient = webClientBuilder.baseUrl("apap-050.cs.ui.ac.id/api").build(); // Server Order
     }
 
 
@@ -54,6 +54,9 @@ public class AuthServiceImpl implements AuthService {
         // Validasi untuk check apakah email/username/password unik
         var findUserByUsername = userDb.findByUsername(request.getUsername()).orElse(null);
         var findUserByEmail = userDb.findByEmail(request.getEmail()).orElse(null);
+        if (request.getPassword() == null) {
+            request.setPassword("SSOPassword");
+        }
         var findUserByPassword = userDb.findByPassword(passwordEncoder.encode(request.getPassword())).orElse(null);
         var response = RegisterResponse.builder();
 
@@ -102,52 +105,66 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse loginForSeller(LoginRequest request) {
-        var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
-                : userDb.findByUsername(request.getUsernameOrEmail()).get();
+        try {
+            var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
+                    : userDb.findByUsername(request.getUsernameOrEmail()).get();
 
-        if (user.getRole().getRoleName().equals("CUSTOMER")) {
-            return LoginResponse.builder().status(false)
-                    .message("Account isn't registered as Seller.").build();
+            if (user.getRole().getRoleName().equals("CUSTOMER")) {
+                return LoginResponse.builder().status(false)
+                        .message("Account isn't registered as Seller.").build();
+            }
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsernameOrEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            var jwtToken = jwtService.createToken(user);
+            return LoginResponse.builder()
+                    .status(true)
+                    .message("You are successfully logged in!")
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception e) {
+            return LoginResponse.builder()
+                    .status(false)
+                    .message("No such element")
+                    .build();
         }
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsernameOrEmail(),
-                        request.getPassword()
-                )
-        );
-
-        var jwtToken = jwtService.createToken(user);
-        return LoginResponse.builder()
-                .status(true)
-                .message("You are successfully logged in!")
-                .token(jwtToken)
-                .build();
     }
 
     @Override
     public LoginResponse loginForCustomer(LoginRequest request) {
-        var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
-                : userDb.findByUsername(request.getUsernameOrEmail()).get();
+        try {
+            var user = (isInputEmail(request.getUsernameOrEmail())) ? userDb.findByEmail(request.getUsernameOrEmail()).get()
+                    : userDb.findByUsername(request.getUsernameOrEmail()).get();
 
-        if (user.getRole().getRoleName().equals("SELLER")) {
-            return LoginResponse.builder().status(false)
-                    .message("Account isn't registered as Customer.").build();
+            if (user.getRole().getRoleName().equals("SELLER")) {
+                return LoginResponse.builder().status(false)
+                        .message("Account isn't registered as Customer.").build();
+            }
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsernameOrEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            var jwtToken = jwtService.createToken(user);
+            return LoginResponse.builder()
+                    .status(true)
+                    .message("You are successfully logged in!")
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception e) {
+            return LoginResponse.builder()
+                    .status(false)
+                    .message("Please check your credentials again.")
+                    .build();
         }
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsernameOrEmail(),
-                        request.getPassword()
-                )
-        );
-
-        var jwtToken = jwtService.createToken(user);
-        return LoginResponse.builder()
-                .status(true)
-                .message("You are successfully logged in!")
-                .token(jwtToken)
-                .build();
     }
 
     @Override

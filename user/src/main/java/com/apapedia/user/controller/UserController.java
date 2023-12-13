@@ -1,10 +1,13 @@
 package com.apapedia.user.controller;
 
+import com.apapedia.user.config.JwtService;
+import com.apapedia.user.dto.request.TokenRequest;
 import com.apapedia.user.dto.request.UpdateUserDataRequest;
 import com.apapedia.user.dto.response.UpdateUserBalanceResponse;
 import com.apapedia.user.dto.response.UpdateUserDataResponse;
 import com.apapedia.user.dto.response.UserDataResponse;
 import com.apapedia.user.service.user.UserService;
+import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,23 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    JwtService jwtService;
+
+    @GetMapping("")
+    public ResponseEntity<String> getLoggedInUserId(
+            @RequestHeader("Authorization") String token
+    ) {
+        try {
+            Claims claims = jwtService.extractAllClaims(token.substring(7));
+            return ResponseEntity.ok((String) claims.get("id"));
+        } catch (Exception e) {
+            return ResponseEntity.ok("Invalid Token");
+        }
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserDataResponse> getUser(
+    public ResponseEntity<UserDataResponse> getUserById(
             @RequestHeader("Authorization") String token,
             @PathVariable("id") UUID id
     ) {
@@ -33,14 +51,16 @@ public class UserController {
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<String> deleteUser(
+            @RequestHeader("Authorization") String token,
             @PathVariable("id") UUID id
     ) {
         userService.deleteUser(id);
-        return ResponseEntity.ok("User berhasil di-delete.");
+        return ResponseEntity.ok("User is successfully deleted.");
     }
 
     @PutMapping("/{id}/update")
     public ResponseEntity<UpdateUserDataResponse> updateUser(
+            @RequestHeader("Authorization") String token,
             @Valid @RequestBody UpdateUserDataRequest updateUserDataRequest,
             BindingResult bindingResult
     ) {
@@ -56,6 +76,7 @@ public class UserController {
 
     @PutMapping("/{id}/balance")
     public ResponseEntity<UpdateUserBalanceResponse> updateBalance(
+            @RequestHeader("Authorization") String token,
             @PathVariable("id") UUID id,
             @RequestParam(value = "add", required = false) Long addMoneyAmount,
             @RequestParam(value = "withdraw", required = false) Long withdrawMoneyAmount

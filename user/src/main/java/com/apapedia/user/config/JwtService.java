@@ -5,8 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -17,8 +19,10 @@ import java.util.function.Function;
 
 // Do not change this code
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
+    private final UserDetailsService userDetailsService;
     private static final String SECRET_KEY = "645367566B59703373367639792F423F4528482B4D6251655468576D5A713474";
 
     public String extractUsername(String token) {
@@ -40,6 +44,11 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public boolean isTokenValid(String token) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(extractUsername(token));
+        return isTokenValid(token, userDetails);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

@@ -11,10 +11,8 @@ import com.apapedia.order.model.Cart;
 @Repository
 public interface CartDb extends JpaRepository<Cart, UUID> {
 
-    Cart getCartByUserId(UUID idCustomer);
+    Cart findByUserId(UUID userId);
+    Cart findByIdCart(UUID idCart);
 
-
-
-    
 } 
 

@@ -30,6 +30,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'jakarta.persistence:jakarta.persistence-api:2.2.3'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.2'
+<<<<<<< HEAD
+=======
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.0"
+    implementation "org.glassfish.jaxb:jaxb-runtime:4.0.2"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+>>>>>>> 6835b0b29b221444ad3faf6064b2633b90bc9225
 }
 
 tasks.named('test') {

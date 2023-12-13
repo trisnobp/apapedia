@@ -39,8 +39,10 @@ public class UserServiceImpl implements UserService {
         var userDTO = userMapper.userToUserDataResponse(user);
         // Check if the role is Seller
         if (user.getRole() == Role.SELLER) {
+            userDTO.setRole("Seller");
             userDTO.setCategory(getSellerCategory(id));
         } else {
+            userDTO.setRole("Customer");
             userDTO.setCartId(getCustomerCartId(id));
         }
         return userDTO;
@@ -49,22 +51,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public UpdateUserDataResponse updateUser(UpdateUserDataRequest request) {
         var user = userDb.findById(request.getId()).get();
-        // Cek kesamaan password
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return UpdateUserDataResponse.builder().status(false)
-                    .message("Password baru tidak boleh sama dengan password lama.").build();
+
+        if (request.getPassword() != null) {
+            // Cek kesamaan password
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                return UpdateUserDataResponse.builder().status(false)
+                        .message("Password baru tidak boleh sama dengan password lama.").build();
+            }
         }
 
         user.setName(request.getName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        if (request.getRole().equals("CUSTOMER")) {
+            if (request.getPassword() != null) {
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+            }
+        }
         user.setAddress(request.getAddress());
         user.setUpdatedAt(LocalDateTime.now());
         userDb.save(user);
 
-        return UpdateUserDataResponse.builder().status(true)
-                .message("Akun berhasil di-update. Silakan coba login kembali.").build();
+        if (user.getRole().getRoleName().equals("SELLER")) {
+            return UpdateUserDataResponse.builder().status(true)
+                    .message("Akun berhasil di-update.").build();
+        } else {
+            return UpdateUserDataResponse.builder().status(true)
+                    .message("Akun berhasil di-update. Silakan coba login kembali.").build();
+        }
     }
 
     @Override
@@ -98,14 +113,14 @@ public class UserServiceImpl implements UserService {
         // Validasi apakah amount melebih jumlah balance yang dimiliki
         if (amount > user.getBalance()) {
             return UpdateUserBalanceResponse.builder().status(false)
-                    .message("Jumlah uang yang diminta melebihi jumlah uang yang dimiliki.")
+                    .message("Jumlah uang yang diminta melebihi jumlah saldo yang dimiliki.")
                     .balance(user.getBalance()).build();
         }
 
         user.setBalance(user.getBalance() - amount);
         userDb.save(user);
         return UpdateUserBalanceResponse.builder().status(true)
-                .message("Saldo berhasil ditambahkan!")
+                .message("Saldo berhasil diambil!")
                 .balance(user.getBalance()).build();
     }
 }

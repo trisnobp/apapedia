@@ -18,15 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CartItemDTO {
-
     private UUID idCartItem ;
-
     private UUID idCart;
-  
-
     private UUID productId;
-
-    private Cart Cart;
-
-    private Integer quantity ; 
+    private Integer quantity;
 }
