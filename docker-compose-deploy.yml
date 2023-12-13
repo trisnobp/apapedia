@@ -73,7 +73,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret99
     volumes:
-      - db_order:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     networks:
       - backend-network
 
