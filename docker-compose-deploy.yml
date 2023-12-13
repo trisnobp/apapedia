@@ -27,7 +27,7 @@ services:
       - ./file-storage:/file-storage
       - ./log:/log
     env_file:
-      - catalog/.env
+      - catalogue/.env
     depends_on:
       - db
     networks:
